@@ -32,7 +32,7 @@ export const ItemTooltip: React.FC<ItemTooltipProps> = ({ item, children }) => {
         {/* Description */}
         {item.description && (
           <p className="text-lg font-retro text-slate-300 italic mb-4 pb-2 border-b-2 border-rpg-border leading-tight">
-            "{item.description}"
+            &quot;{item.description}&quot;
           </p>
         )}
         

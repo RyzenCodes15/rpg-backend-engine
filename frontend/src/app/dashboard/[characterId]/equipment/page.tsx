@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Equipment, getEquipment, unequipItem } from '@/lib/api/equipment';
 import { EquipmentPanel } from '@/components/equipment/EquipmentPanel';
 
@@ -9,7 +9,7 @@ export default function CharacterEquipmentPage({ params }: { params: { character
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const fetchEq = async () => {
+  const fetchEq = useCallback(async () => {
     try {
       const data = await getEquipment(params.characterId);
       setEquipment(data);
@@ -18,11 +18,11 @@ export default function CharacterEquipmentPage({ params }: { params: { character
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.characterId]);
 
   useEffect(() => {
     fetchEq();
-  }, [params.characterId]);
+  }, [fetchEq]);
 
   const handleUnequip = async (slot: any) => {
     try {
