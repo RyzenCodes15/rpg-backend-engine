@@ -1,0 +1,15 @@
+@startuml er-diagram
+hide circle
+skinparam linetype ortho
+
+entity "users" as users {
+  *id : UUID <<generated>>
+  --
+  *username : VARCHAR(50) <<unique>>
+  *email : VARCHAR(255) <<unique>>
+  *password_hash : VARCHAR(255)
+  *role : VARCHAR(20)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+@enduml

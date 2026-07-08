@@ -1,21 +1,50 @@
 @startuml class-diagram
 skinparam style strictuml
 
-package "com.rpgengine.character.domain" {
-    class Character {
-        - id: UUID
-        - name: String
-        - level: Integer
-        - experience: Long
-        + attack(target: Character)
+package "com.rpgengine.auth" {
+    package "domain" {
+        class User {
+            - id: UUID
+            - username: String
+            - email: String
+            - passwordHash: String
+            - role: Role
+        }
+        enum Role {
+            PLAYER
+            ADMIN
+        }
+        interface UserRepository {
+            + save(user: User): User
+            + findByUsername(username: String): Optional<User>
+        }
+        User -> Role
     }
 
-    class Stats {
-        - strength: Integer
-        - agility: Integer
-        - intelligence: Integer
+    package "application" {
+        class AuthService {
+            + register(req: RegisterRequest): AuthResponse
+            + login(req: LoginRequest): AuthResponse
+        }
+        class JwtService {
+            + generateToken(user: UserDetails): String
+            + isTokenValid(token: String): boolean
+        }
+        AuthService -> UserRepository
+        AuthService -> JwtService
     }
-    
-    Character "1" *-- "1" Stats : has
+
+    package "infrastructure" {
+        class UserEntity {
+            - id: UUID
+            - username: String
+        }
+        class JpaUserRepository <<interface>>
+        class UserRepositoryImpl
+        
+        UserRepositoryImpl ..|> UserRepository
+        UserRepositoryImpl -> JpaUserRepository
+        UserRepositoryImpl -> UserEntity
+    }
 }
 @enduml

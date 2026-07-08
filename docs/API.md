@@ -1,26 +1,71 @@
 # API Documentation
 
-This backend exposes a REST API compliant with OpenAPI 3 standards.
+The RPG Backend Engine API is documented using OpenAPI 3.
+
+## Base URL
+`/api/v1`
 
 ## Swagger UI
-
-When the backend application is running locally, you can access the interactive API documentation and Swagger UI at:
-
+When running locally, Swagger UI is available at:
 `http://localhost:8080/swagger-ui.html`
 
-The raw OpenAPI JSON/YAML definition can be accessed at:
+## Endpoints (Authentication Module)
 
-`http://localhost:8080/v3/api-docs`
+### `POST /auth/register`
+Creates a new player account and returns a JWT token.
 
-## Standard Responses
-
-This API follows RFC 7807 for error reporting.
-
+**Request Body:**
 ```json
 {
-  "type": "https://example.com/probs/out-of-credit",
-  "title": "You do not have enough credit.",
+  "username": "player1",
+  "email": "player1@example.com",
+  "password": "securepassword123"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "token": "eyJhbGciOiJIUz...",
+  "userId": "123e4567-e89b-12d3-a456-426614174000",
+  "username": "player1",
+  "role": "PLAYER"
+}
+```
+
+### `POST /auth/login`
+Authenticates a user and returns a JWT token.
+
+**Request Body:**
+```json
+{
+  "username": "player1",
+  "password": "securepassword123"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "token": "eyJhbGciOiJIUz...",
+  "userId": "123e4567-e89b-12d3-a456-426614174000",
+  "username": "player1",
+  "role": "PLAYER"
+}
+```
+
+## Error Handling
+The API follows RFC 7807 Problem Details.
+
+Example Validation Error:
+```json
+{
+  "type": "https://api.rpgengine.com/errors/validation-failed",
+  "title": "Bad Request",
   "status": 400,
-  "detail": "Your current balance is 30, but that costs 50."
+  "detail": "Validation failed",
+  "errors": {
+    "email": "Email must be valid"
+  }
 }
 ```

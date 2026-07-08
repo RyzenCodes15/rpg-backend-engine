@@ -1,0 +1,41 @@
+@startuml sequence-diagram
+actor Client
+
+box "Presentation"
+participant AuthController
+end box
+
+box "Application"
+participant AuthService
+participant JwtService
+end box
+
+box "Infrastructure"
+participant UserRepositoryImpl
+participant JpaUserRepository
+end box
+
+Client -> AuthController: POST /api/v1/auth/login
+activate AuthController
+
+AuthController -> AuthService: login(LoginRequest)
+activate AuthService
+
+AuthService -> UserRepositoryImpl: findByUsername()
+activate UserRepositoryImpl
+UserRepositoryImpl -> JpaUserRepository: findByUsername()
+JpaUserRepository --> UserRepositoryImpl: UserEntity
+UserRepositoryImpl --> AuthService: User
+deactivate UserRepositoryImpl
+
+AuthService -> JwtService: generateToken(User)
+activate JwtService
+JwtService --> AuthService: String (JWT)
+deactivate JwtService
+
+AuthService --> AuthController: AuthResponse
+deactivate AuthService
+
+AuthController --> Client: 200 OK + JWT
+deactivate AuthController
+@enduml

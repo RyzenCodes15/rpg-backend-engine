@@ -1,6 +1,19 @@
 # Scalable Multiplayer RPG Backend Engine
 
-This repository contains a production-quality, scalable backend engine and management interface designed for an online RPG.
+## Current State: Authentication Milestone Completed
+
+We have successfully implemented the foundational backend infrastructure and the **Authentication Module**.
+
+### Features Implemented:
+- Hexagonal architecture and Package-by-Feature structure.
+- Dockerized PostgreSQL setup with Flyway migrations.
+- Global exception handling using RFC 7807 problem details.
+- User Entity, Registration, and Login use cases.
+- Stateless authentication using JWT and BCrypt password hashing.
+- Unit and Integration tests for backend logic.
+- Next.js 14 frontend skeleton with basic retro RPG theme.
+- Interactive Login and Registration UI consuming the backend API.
+- Fully documented via OpenAPI (Swagger).
 
 ## Architecture
 
