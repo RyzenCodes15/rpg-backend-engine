@@ -33,10 +33,10 @@ To spin up the entire stack locally for development:
 docker-compose up --build
 ```
 This will start:
-- PostgreSQL Database on port `5432`
+- PostgreSQL Database on port `5433`
 - PgAdmin on port `5050`
 - Spring Boot Backend on port `8080`
-- Next.js Frontend on port `3000`
+- Next.js Frontend on port `3001`
 
 ## Documentation
 
