@@ -30,7 +30,7 @@ public class CharacterController {
     @PostMapping
     @Operation(summary = "Create a new character")
     public ResponseEntity<CharacterResponse> createCharacter(
-            @AuthenticationPrincipal UUID userId,
+            @AuthenticationPrincipal(expression = "id") UUID userId,
             @Valid @RequestBody CreateCharacterRequest request) {
         
         Character character = characterService.createCharacter(userId, request.name(), request.characterClass());
@@ -39,7 +39,7 @@ public class CharacterController {
 
     @GetMapping
     @Operation(summary = "Get all characters for the authenticated user")
-    public ResponseEntity<List<CharacterResponse>> getUserCharacters(@AuthenticationPrincipal UUID userId) {
+    public ResponseEntity<List<CharacterResponse>> getUserCharacters(@AuthenticationPrincipal(expression = "id") UUID userId) {
         List<CharacterResponse> characters = characterService.getUserCharacters(userId).stream()
                 .map(CharacterResponse::fromDomain)
                 .collect(Collectors.toList());
@@ -49,7 +49,7 @@ public class CharacterController {
     @GetMapping("/{characterId}")
     @Operation(summary = "Get character details")
     public ResponseEntity<CharacterResponse> getCharacter(
-            @AuthenticationPrincipal UUID userId,
+            @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId) {
         
         Character character = characterService.getCharacter(characterId);
@@ -62,7 +62,7 @@ public class CharacterController {
     @DeleteMapping("/{characterId}")
     @Operation(summary = "Delete a character")
     public ResponseEntity<Void> deleteCharacter(
-            @AuthenticationPrincipal UUID userId,
+            @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId) {
         
         characterService.deleteCharacter(characterId, userId);
@@ -72,7 +72,7 @@ public class CharacterController {
     @PostMapping("/{characterId}/exp")
     @Operation(summary = "Add experience to a character (Development/Testing)")
     public ResponseEntity<Void> addExperience(
-            @AuthenticationPrincipal UUID userId,
+            @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId,
             @RequestParam long amount) {
         

@@ -31,7 +31,7 @@ public class EquipmentController {
     @GetMapping
     @Operation(summary = "Get character equipment")
     public ResponseEntity<EquipmentResponse> getEquipment(
-            @AuthenticationPrincipal UUID userId,
+            @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId) {
             
         Character character = characterService.getCharacter(characterId);
@@ -46,7 +46,7 @@ public class EquipmentController {
     @PostMapping("/{slot}/equip/{itemId}")
     @Operation(summary = "Equip an item")
     public ResponseEntity<Void> equipItem(
-            @AuthenticationPrincipal UUID userId,
+            @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId,
             @PathVariable EquipmentSlot slot,
             @PathVariable UUID itemId) {
@@ -63,7 +63,7 @@ public class EquipmentController {
     @PostMapping("/{slot}/unequip")
     @Operation(summary = "Unequip an item")
     public ResponseEntity<Void> unequipItem(
-            @AuthenticationPrincipal UUID userId,
+            @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId,
             @PathVariable EquipmentSlot slot) {
             

@@ -30,7 +30,7 @@ public class InventoryController {
     @GetMapping
     @Operation(summary = "Get character inventory")
     public ResponseEntity<InventoryResponse> getInventory(
-            @AuthenticationPrincipal UUID userId,
+            @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId) {
             
         // Check authorization
@@ -46,7 +46,7 @@ public class InventoryController {
     @PostMapping("/items/{itemId}")
     @Operation(summary = "Add an item to the inventory (Development/Testing)")
     public ResponseEntity<Void> addItem(
-            @AuthenticationPrincipal UUID userId,
+            @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId,
             @PathVariable UUID itemId,
             @RequestParam(defaultValue = "1") int quantity) {
