@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: rpg_database
+    environment:
+      POSTGRES_USER: rpg_user
+      POSTGRES_PASSWORD: rpg_password
+      POSTGRES_DB: rpg_engine
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - rpg_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: rpg_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@rpgengine.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - database
+    networks:
+      - rpg_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rpg_backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/rpg_engine
+      - SPRING_DATASOURCE_USERNAME=rpg_user
+      - SPRING_DATASOURCE_PASSWORD=rpg_password
+    depends_on:
+      - database
+    networks:
+      - rpg_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rpg_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - rpg_network
+
+volumes:
+  pgdata:
+
+networks:
+  rpg_network:
+    driver: bridge

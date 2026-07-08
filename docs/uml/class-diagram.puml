@@ -1,0 +1,21 @@
+@startuml class-diagram
+skinparam style strictuml
+
+package "com.rpgengine.character.domain" {
+    class Character {
+        - id: UUID
+        - name: String
+        - level: Integer
+        - experience: Long
+        + attack(target: Character)
+    }
+
+    class Stats {
+        - strength: Integer
+        - agility: Integer
+        - intelligence: Integer
+    }
+    
+    Character "1" *-- "1" Stats : has
+}
+@enduml

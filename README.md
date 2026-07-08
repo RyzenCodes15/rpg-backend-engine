@@ -1,87 +1,35 @@
-# RPG Backend Engine
+# Scalable Multiplayer RPG Backend Engine
 
-A scalable multiplayer RPG backend engine built using modern Java technologies and software engineering practices.
+This repository contains a production-quality, scalable backend engine and management interface designed for an online RPG.
 
-## Vision
+## Architecture
 
-This project aims to demonstrate production-quality backend development through the implementation of:
+This project is structured as a monorepo containing both the backend service and the frontend management UI.
 
-* Object-Oriented Programming (OOP)
-* SOLID Principles
-* Design Patterns
-* Clean Architecture
-* UML Modeling
-* Event-Driven Systems
-* Real-Time Communication
-* CI/CD and Containerization
+- **Backend**: Java 21, Spring Boot 3, Clean Architecture (Package-by-Feature)
+- **Frontend**: Next.js, React, Tailwind CSS, TypeScript
+- **Database**: PostgreSQL (managed via Flyway migrations)
 
-## Planned Features
+Please refer to `docs/Architecture.md` for a complete architecture overview and module dependency diagrams.
 
-### Character System
+## Quick Start (Docker)
 
-* Warrior, Mage, and Archer classes
-* Character progression and leveling
-* Skills and abilities
+To spin up the entire stack locally for development:
 
-### Combat Engine
-
-* Melee, ranged, and magical attacks
-* Status effects
-* Experience and rewards
-
-### Inventory System
-
-* Weapons, armor, potions, and quest items
-* Equipment management
-* Trading between players
-
-### Quest System
-
-* Quest progression
-* State-based quest lifecycle
-* Reward handling
-
-### Guild System
-
-* Guild creation and management
-* Member roles and permissions
-* Guild rankings
-
-### Real-Time Features
-
-* Guild chat
-* Combat notifications
-* Level-up events
-
-## Tech Stack
-
-* Java 21
-* Spring Boot 3
-* PostgreSQL
-* Redis
-* WebSockets
-* Docker & Docker Compose
-* JWT Authentication
-* JUnit 5 & Mockito
-* GitHub Actions
-* OpenAPI/Swagger
+```bash
+docker-compose up --build
+```
+This will start:
+- PostgreSQL Database on port `5432`
+- PgAdmin on port `5050`
+- Spring Boot Backend on port `8080`
+- Next.js Frontend on port `3000`
 
 ## Documentation
 
-Project documentation is maintained in the `docs/` directory.
-
-* `docs/project-vision.md`
-* `docs/decisions/`
-* `docs/uml/`
-* `docs/architecture/`
-
-## Development Roadmap
-
-* Phase 1: OOP Foundations
-* Phase 2: Design Patterns and UML
-* Phase 3: Spring Boot and Persistence
-* Phase 4: Advanced Features and Deployment
-
-## License
-
-MIT License.
+Full documentation is available in the `docs/` folder:
+- [Architecture](docs/Architecture.md)
+- [API](docs/API.md)
+- [Database](docs/Database.md)
+- [Deployment](docs/Deployment.md)
+- [UML Diagrams](docs/uml/)
