@@ -2,6 +2,7 @@ import React from 'react';
 import { Inventory, InventorySlot as Slot, Item } from '@/lib/api/inventory';
 import { ItemTooltip } from './ItemTooltip';
 import Image from 'next/image';
+import { getItemIconPath } from '@/lib/itemUtils';
 
 interface InventoryGridProps {
   inventory: Inventory | null;
@@ -51,7 +52,7 @@ export const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, onItemC
                 <div className="w-full h-full flex items-center justify-center p-2">
                   <div className="relative w-full h-full">
                     <Image 
-                      src={`/assets/items/${slot.item.category.toLowerCase()}.png`}
+                      src={getItemIconPath(slot.item)}
                       alt={slot.item.name}
                       fill
                       className="object-contain pixelated drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]"

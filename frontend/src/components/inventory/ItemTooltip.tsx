@@ -1,5 +1,7 @@
 import React from 'react';
 import { Item } from '@/lib/api/inventory';
+import Image from 'next/image';
+import { getItemIconPath } from '@/lib/itemUtils';
 
 interface ItemTooltipProps {
   item: Item;
@@ -24,7 +26,12 @@ export const ItemTooltip: React.FC<ItemTooltipProps> = ({ item, children }) => {
       <div className="absolute z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity bottom-full left-1/2 -translate-x-1/2 mb-4 w-72 bg-rpg-bg border-4 border-rpg-border pixel-border p-4 pointer-events-none">
         
         {/* Title & Rarity */}
-        <h4 className={`font-pixel text-sm drop-shadow-[1px_1px_0px_rgba(0,0,0,1)] mb-2 ${getRarityColor(item.rarity)}`}>{item.name}</h4>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 relative bg-rpg-surface border-2 border-rpg-border pixel-border shrink-0">
+            <Image src={getItemIconPath(item)} alt={item.name} fill className="object-contain pixelated p-1" />
+          </div>
+          <h4 className={`font-pixel text-sm drop-shadow-[1px_1px_0px_rgba(0,0,0,1)] ${getRarityColor(item.rarity)}`}>{item.name}</h4>
+        </div>
         <p className="text-sm font-retro text-rpg-text mb-2 border-b-2 border-rpg-border pb-2">
           {item.category} • Lvl {item.requiredLevel}
         </p>

@@ -3,6 +3,7 @@ import { Equipment, EquipmentSlot } from '@/lib/api/equipment';
 import { Item } from '@/lib/api/inventory';
 import { ItemTooltip } from '../inventory/ItemTooltip';
 import Image from 'next/image';
+import { getItemIconPath } from '@/lib/itemUtils';
 
 interface EquipmentPanelProps {
   equipment: Equipment | null;
@@ -40,7 +41,7 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
             <div className="w-full h-full flex items-center justify-center p-2">
               <div className="relative w-full h-full">
                 <Image 
-                  src={`/assets/items/${item.category.toLowerCase()}.png`}
+                  src={getItemIconPath(item)}
                   alt={item.name}
                   fill
                   className="object-contain pixelated drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]"
@@ -49,7 +50,14 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
             </div>
           </ItemTooltip>
         ) : (
-          <div className="font-retro text-lg text-rpg-border/50">Empty</div>
+          <div className="relative w-full h-full opacity-30">
+            <Image 
+              src={`/assets/items/placeholders/${slotType.toLowerCase() === 'chest_armor' ? 'chest_armor' : slotType.toLowerCase()}.png`}
+              alt={`Empty ${label} slot`}
+              fill
+              className="object-contain pixelated p-3 grayscale"
+            />
+          </div>
         )}
       </div>
     </div>

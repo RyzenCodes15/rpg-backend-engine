@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { getItemIconPath } from '@/lib/itemUtils';
 
 export default function CombatPage({ params }: { params: { characterId: string, monsterId: string } }) {
   const router = useRouter();
@@ -266,19 +267,36 @@ export default function CombatPage({ params }: { params: { characterId: string, 
           </h2>
           
           {combatResult.isVictory && (
-            <div className="flex justify-center gap-8 mb-8">
-              <div className="text-xl">
-                <span className="block text-gray-400 text-sm font-pixel mb-1">XP Earned</span>
-                <span className="text-blue-400 font-bold">+{combatResult.experienceEarned}</span>
+            <div className="flex flex-col items-center justify-center mb-8 border-t-2 border-b-2 border-rpg-border py-6 bg-black/30">
+              <h3 className="font-pixel text-xl mb-6">Rewards</h3>
+              <div className="flex flex-wrap justify-center gap-8 mb-6">
+                <div className="flex flex-col items-center">
+                  <div className="w-16 h-16 relative bg-rpg-surface border-4 border-rpg-border pixel-border mb-2 p-1">
+                    <Image src="/assets/icons/xp.svg" alt="XP" fill className="object-contain pixelated" />
+                  </div>
+                  <span className="text-blue-400 font-bold font-retro text-xl">+{combatResult.experienceEarned}</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-16 h-16 relative bg-rpg-surface border-4 border-rpg-border pixel-border mb-2 p-1">
+                    <Image src="/assets/icons/gold.svg" alt="Gold" fill className="object-contain pixelated" />
+                  </div>
+                  <span className="text-yellow-400 font-bold font-retro text-xl">+{combatResult.goldEarned}</span>
+                </div>
               </div>
-              <div className="text-xl">
-                <span className="block text-gray-400 text-sm font-pixel mb-1">Gold Found</span>
-                <span className="text-yellow-400 font-bold">+{combatResult.goldEarned}</span>
-              </div>
+              
               {combatResult.itemsDropped.length > 0 && (
-                <div className="text-xl">
-                  <span className="block text-gray-400 text-sm font-pixel mb-1">Items Dropped</span>
-                  <span className="text-green-400 font-bold">{combatResult.itemsDropped.length}</span>
+                <div className="w-full max-w-lg mt-4 border-t-2 border-rpg-border/50 pt-6">
+                  <h4 className="font-pixel text-sm text-gray-400 mb-4">Loot Dropped:</h4>
+                  <div className="flex flex-wrap justify-center gap-4">
+                    {combatResult.itemsDropped.map((itemName, idx) => (
+                      <div key={idx} className="flex flex-col items-center group">
+                        <div className="w-16 h-16 relative bg-rpg-surface border-4 border-rpg-border pixel-border hover:border-white transition-colors cursor-help mb-2 p-1">
+                          <Image src={getItemIconPath(itemName)} alt={itemName} fill className="object-contain pixelated" />
+                        </div>
+                        <span className="text-xs font-retro text-gray-300 group-hover:text-white transition-colors">{itemName}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
