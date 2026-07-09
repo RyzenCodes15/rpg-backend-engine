@@ -5,7 +5,8 @@ import com.rpgengine.character.domain.CharacterStats;
 import com.rpgengine.combat.domain.Monster;
 import com.rpgengine.combat.domain.statuseffect.StatusEffect;
 import com.rpgengine.inventory.domain.Equipment;
-import com.rpgengine.inventory.domain.Item;
+import com.rpgengine.inventory.domain.Equipment;
+import com.rpgengine.character.domain.CharacterStatsCalculator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class CombatEngine {
         CombatLog log = new CombatLog();
         
         // Calculate total character stats including equipment
-        CharacterStats totalStats = calculateTotalStats(character.getBaseStats(), equipment);
+        CharacterStats totalStats = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment);
         
         int charHealth = character.getCurrentHealth();
         int monsterHealth = monster.getHealth();
@@ -113,27 +114,4 @@ public class CombatEngine {
         return Math.max(1, damage);
     }
 
-    private CharacterStats calculateTotalStats(CharacterStats baseStats, Equipment equipment) {
-        if (equipment == null) return baseStats;
-        
-        CharacterStats current = baseStats;
-        current = addStats(current, equipment.getWeapon());
-        current = addStats(current, equipment.getHelmet());
-        current = addStats(current, equipment.getChestArmor());
-        current = addStats(current, equipment.getGloves());
-        current = addStats(current, equipment.getBoots());
-        return current;
-    }
-
-    private CharacterStats addStats(CharacterStats stats, Item item) {
-        if (item == null) return stats;
-        return new CharacterStats(
-                stats.health() + item.getStats().bonusHealth(),
-                stats.mana() + item.getStats().bonusMana(),
-                stats.attack() + item.getStats().bonusAttack(),
-                stats.defense() + item.getStats().bonusDefense(),
-                stats.speed() + item.getStats().bonusSpeed(),
-                stats.criticalChance().add(item.getStats().bonusCriticalChance())
-        );
-    }
 }

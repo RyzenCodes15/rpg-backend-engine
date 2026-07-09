@@ -45,20 +45,9 @@ export default function CombatPage({ params }: { params: { characterId: string, 
         setEquipment(eqData);
         setCombatResult(result);
         
-        // Use total stats if available, otherwise fallback
-        let bonusHp = 0;
-        if (eqData) {
-          const items = [eqData.weapon, eqData.helmet, eqData.chestArmor, eqData.gloves, eqData.boots];
-          items.forEach(item => {
-            if (item && item.stats && item.stats.bonusHealth) {
-              bonusHp += item.stats.bonusHealth;
-            }
-          });
-        }
-        
-        const maxHp = charData.baseStats.health + bonusHp;
-        // Current HP is the maxHp at the start of combat in this frontend simulation
-        setCharCurrentHp(maxHp);
+        const maxHp = charData.maxHealth;
+        // Start combat with actual current HP
+        setCharCurrentHp(charData.currentHealth);
         setMonsterCurrentHp(monsterData.health);
         
       } catch (error) {
@@ -143,16 +132,7 @@ export default function CombatPage({ params }: { params: { characterId: string, 
     return <div className="text-center p-8 text-rpg-error font-pixel">Battle failed to initialize.</div>;
   }
 
-  let bonusHp = 0;
-  if (equipment) {
-    const items = [equipment.weapon, equipment.helmet, equipment.chestArmor, equipment.gloves, equipment.boots];
-    items.forEach(item => {
-      if (item && item.stats && item.stats.bonusHealth) {
-        bonusHp += item.stats.bonusHealth;
-      }
-    });
-  }
-  const charMaxHp = character.baseStats.health + bonusHp;
+  const charMaxHp = character.maxHealth;
   const monsterMaxHp = monster.health;
 
   return (

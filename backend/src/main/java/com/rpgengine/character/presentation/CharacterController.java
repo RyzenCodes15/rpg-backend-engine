@@ -4,6 +4,10 @@ import com.rpgengine.character.application.CharacterService;
 import com.rpgengine.character.domain.Character;
 import com.rpgengine.character.presentation.dto.CharacterResponse;
 import com.rpgengine.character.presentation.dto.CreateCharacterRequest;
+import com.rpgengine.inventory.application.EquipmentService;
+import com.rpgengine.inventory.domain.Equipment;
+import com.rpgengine.character.domain.CharacterStatsCalculator;
+import com.rpgengine.character.domain.CharacterStats;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,9 +26,11 @@ import java.util.stream.Collectors;
 public class CharacterController {
 
     private final CharacterService characterService;
+    private final EquipmentService equipmentService;
 
-    public CharacterController(CharacterService characterService) {
+    public CharacterController(CharacterService characterService, EquipmentService equipmentService) {
         this.characterService = characterService;
+        this.equipmentService = equipmentService;
     }
 
     @PostMapping
@@ -34,14 +40,20 @@ public class CharacterController {
             @Valid @RequestBody CreateCharacterRequest request) {
         
         Character character = characterService.createCharacter(userId, request.name(), request.characterClass());
-        return ResponseEntity.status(HttpStatus.CREATED).body(CharacterResponse.fromDomain(character));
+        Equipment equipment = equipmentService.getEquipmentByCharacterId(character.getId());
+        CharacterStats totalStats = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(CharacterResponse.fromDomain(character, totalStats));
     }
 
     @GetMapping
     @Operation(summary = "Get all characters for the authenticated user")
     public ResponseEntity<List<CharacterResponse>> getUserCharacters(@AuthenticationPrincipal(expression = "id") UUID userId) {
         List<CharacterResponse> characters = characterService.getUserCharacters(userId).stream()
-                .map(CharacterResponse::fromDomain)
+                .map(character -> {
+                    Equipment equipment = equipmentService.getEquipmentByCharacterId(character.getId());
+                    CharacterStats totalStats = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment);
+                    return CharacterResponse.fromDomain(character, totalStats);
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(characters);
     }
@@ -56,7 +68,9 @@ public class CharacterController {
         if (!character.getUserId().equals(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(CharacterResponse.fromDomain(character));
+        Equipment equipment = equipmentService.getEquipmentByCharacterId(characterId);
+        CharacterStats totalStats = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment);
+        return ResponseEntity.ok(CharacterResponse.fromDomain(character, totalStats));
     }
 
     @DeleteMapping("/{characterId}")

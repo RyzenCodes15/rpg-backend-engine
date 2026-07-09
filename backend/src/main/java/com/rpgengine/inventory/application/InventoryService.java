@@ -3,8 +3,11 @@ package com.rpgengine.inventory.application;
 import com.rpgengine.common.exception.ResourceNotFoundException;
 import com.rpgengine.inventory.domain.Inventory;
 import com.rpgengine.inventory.domain.Item;
+import com.rpgengine.inventory.domain.Equipment;
+import com.rpgengine.inventory.domain.repository.EquipmentRepository;
 import com.rpgengine.inventory.domain.repository.InventoryRepository;
 import com.rpgengine.inventory.domain.repository.ItemRepository;
+import com.rpgengine.character.domain.CharacterStatsCalculator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +20,13 @@ public class InventoryService {
     private final InventoryRepository inventoryRepository;
     private final ItemRepository itemRepository;
     private final com.rpgengine.character.domain.repository.CharacterRepository characterRepository;
+    private final EquipmentRepository equipmentRepository;
 
-    public InventoryService(InventoryRepository inventoryRepository, ItemRepository itemRepository, com.rpgengine.character.domain.repository.CharacterRepository characterRepository) {
+    public InventoryService(InventoryRepository inventoryRepository, ItemRepository itemRepository, com.rpgengine.character.domain.repository.CharacterRepository characterRepository, EquipmentRepository equipmentRepository) {
         this.inventoryRepository = inventoryRepository;
         this.itemRepository = itemRepository;
         this.characterRepository = characterRepository;
+        this.equipmentRepository = equipmentRepository;
     }
 
     @Transactional
@@ -69,8 +74,9 @@ public class InventoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Character not found"));
 
         // Heal character
+        Equipment equipment = equipmentRepository.findByCharacterId(characterId).orElse(null);
+        int maxHealth = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment).health();
         int healingAmount = item.getStats().bonusHealth();
-        int maxHealth = character.getBaseStats().health();
         int newHealth = Math.min(maxHealth, character.getCurrentHealth() + healingAmount);
         character.setCurrentHealth(newHealth);
         characterRepository.save(character);

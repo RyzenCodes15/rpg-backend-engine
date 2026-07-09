@@ -96,33 +96,14 @@ export default function CharacterDashboardPage({ params }: { params: { character
 
   const expToNextLevel = character.level * 1000;
 
-  const getTotalStats = () => {
-    const base = character.baseStats;
-    let maxHp = base.health;
-    let maxMp = base.mana;
-    let atk = base.attack;
-    let def = base.defense;
-    let spd = base.speed;
-    let crit = base.criticalChance;
-
-    if (equipment) {
-      const items = [equipment.weapon, equipment.helmet, equipment.chestArmor, equipment.gloves, equipment.boots];
-      items.forEach(item => {
-        if (item && item.stats) {
-          maxHp += item.stats.bonusHealth || 0;
-          maxMp += item.stats.bonusMana || 0;
-          atk += item.stats.bonusAttack || 0;
-          def += item.stats.bonusDefense || 0;
-          spd += item.stats.bonusSpeed || 0;
-          crit += item.stats.bonusCriticalChance || 0;
-        }
-      });
-    }
-
-    return { maxHp, maxMp, atk, def, spd, crit };
+  const stats = {
+    maxHp: character.maxHealth,
+    maxMp: character.maxMana,
+    atk: character.totalStats.attack,
+    def: character.totalStats.defense,
+    spd: character.totalStats.speed,
+    crit: character.totalStats.criticalChance
   };
-
-  const stats = getTotalStats();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

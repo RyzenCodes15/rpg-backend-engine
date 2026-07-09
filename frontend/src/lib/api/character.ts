@@ -17,8 +17,11 @@ export interface Character {
   experience: number;
   gold: number;
   currentHealth: number;
+  maxHealth: number;
   currentMana: number;
+  maxMana: number;
   baseStats: CharacterStats;
+  totalStats: CharacterStats;
 }
 
 export const getCharacters = async (): Promise<Character[]> => {

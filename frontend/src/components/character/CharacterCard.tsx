@@ -34,11 +34,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({ character }) => {
         <div className="grid grid-cols-2 gap-4 text-sm mt-auto">
           <div className="bg-rpg-bg p-2 border-2 border-rpg-border">
             <span className="text-rpg-text block text-xs font-pixel mb-1 drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">HP</span>
-            <span className="font-retro text-xl text-red-400">{character.baseStats.health}</span>
+            <span className="font-retro text-xl text-red-400">{character.maxHealth}</span>
           </div>
           <div className="bg-rpg-bg p-2 border-2 border-rpg-border">
             <span className="text-rpg-text block text-xs font-pixel mb-1 drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">MP</span>
-            <span className="font-retro text-xl text-blue-400">{character.baseStats.mana}</span>
+            <span className="font-retro text-xl text-blue-400">{character.maxMana}</span>
           </div>
           <div className="bg-rpg-bg p-2 border-2 border-rpg-border">
             <span className="text-rpg-text block text-xs font-pixel mb-1 drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">Gold</span>
