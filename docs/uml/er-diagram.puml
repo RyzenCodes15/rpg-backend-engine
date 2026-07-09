@@ -3,13 +3,39 @@ hide circle
 skinparam linetype ortho
 
 entity "users" as users {
-  *id : UUID <<generated>>
-  --
-  *username : VARCHAR(50) <<unique>>
-  *email : VARCHAR(255) <<unique>>
-  *password_hash : VARCHAR(255)
-  *role : VARCHAR(20)
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+  *id : UUID
 }
+
+entity "characters" as characters {
+  *id : UUID
+  *user_id : UUID
+}
+
+entity "monsters" as monsters {
+  *id : UUID
+  *name : VARCHAR(50)
+  *level : INT
+}
+
+entity "monster_loot" as monster_loot {
+  *id : UUID
+  *monster_id : UUID
+  *item_id : UUID
+  *drop_chance : DECIMAL
+}
+
+entity "combat_history" as combat_history {
+  *id : UUID
+  *character_id : UUID
+  *monster_id : UUID
+  *is_victory : BOOLEAN
+  *damage_dealt : INT
+  *damage_taken : INT
+}
+
+users ||--o{ characters
+monsters ||--o{ monster_loot
+characters ||--o{ combat_history
+monsters ||--o{ combat_history
+
 @enduml

@@ -22,5 +22,9 @@ export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
     throw new Error(errorData?.title || 'An API error occurred');
   }
 
+  if (response.status === 204) {
+    return null;
+  }
+
   return response.json();
 };

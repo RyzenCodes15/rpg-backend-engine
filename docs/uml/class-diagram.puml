@@ -5,46 +5,47 @@ package "com.rpgengine.auth" {
     package "domain" {
         class User {
             - id: UUID
-            - username: String
-            - email: String
-            - passwordHash: String
-            - role: Role
         }
-        enum Role {
-            PLAYER
-            ADMIN
-        }
-        interface UserRepository {
-            + save(user: User): User
-            + findByUsername(username: String): Optional<User>
-        }
-        User -> Role
-    }
-
-    package "application" {
-        class AuthService {
-            + register(req: RegisterRequest): AuthResponse
-            + login(req: LoginRequest): AuthResponse
-        }
-        class JwtService {
-            + generateToken(user: UserDetails): String
-            + isTokenValid(token: String): boolean
-        }
-        AuthService -> UserRepository
-        AuthService -> JwtService
-    }
-
-    package "infrastructure" {
-        class UserEntity {
-            - id: UUID
-            - username: String
-        }
-        class JpaUserRepository <<interface>>
-        class UserRepositoryImpl
-        
-        UserRepositoryImpl ..|> UserRepository
-        UserRepositoryImpl -> JpaUserRepository
-        UserRepositoryImpl -> UserEntity
     }
 }
+
+package "com.rpgengine.combat" {
+    package "combat.domain" {
+        class Monster {
+            - id: UUID
+            - name: String
+            - level: int
+            - stats: CharacterStats
+        }
+        class CombatEngine {
+            + simulate(char, equip, monster): CombatResult
+        }
+        class CombatResult {
+            - isVictory: boolean
+        }
+        class CombatLog {
+            - events: List<CombatEvent>
+        }
+        interface StatusEffect {
+            + apply(health: int): EffectResult
+        }
+        class CombatHistory {
+            - isVictory: boolean
+            - damageDealt: int
+        }
+        CombatEngine ..> CombatResult
+        CombatEngine ..> StatusEffect
+        CombatResult -> CombatLog
+    }
+    
+    package "combat.application" {
+        class CombatService {
+            + fight(charId, monsterId): CombatResponse
+        }
+        class MonsterService {
+            + getAllMonsters(): List<Monster>
+        }
+    }
+}
+
 @enduml

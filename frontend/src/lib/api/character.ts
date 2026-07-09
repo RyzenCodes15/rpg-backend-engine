@@ -39,3 +39,10 @@ export const deleteCharacter = async (id: string): Promise<void> => {
     method: 'DELETE',
   });
 };
+
+// Development / Testing
+export const addExperience = async (characterId: string, amount: number = 1000): Promise<void> => {
+  await apiFetch(`/characters/${characterId}/exp?amount=${amount}`, {
+    method: 'POST',
+  });
+};

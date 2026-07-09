@@ -37,3 +37,10 @@ export interface Inventory {
 export const getInventory = async (characterId: string): Promise<Inventory> => {
   return apiFetch(`/characters/${characterId}/inventory`);
 };
+
+// Development / Testing
+export const addTestItem = async (characterId: string, itemId: string, quantity: number = 1): Promise<void> => {
+  await apiFetch(`/characters/${characterId}/inventory/items/${itemId}?quantity=${quantity}`, {
+    method: 'POST',
+  });
+};

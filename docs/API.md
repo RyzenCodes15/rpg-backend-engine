@@ -3,7 +3,7 @@
 The RPG Backend Engine API is documented using OpenAPI 3.
 
 ## Base URL
-`/api/v1`
+`/api/v1` (Note: combat/monsters currently mapped without v1 prefix in controllers, ensure context path handles it)
 
 ## Swagger UI
 When running locally, Swagger UI is available at:
@@ -14,58 +14,21 @@ When running locally, Swagger UI is available at:
 ### `POST /auth/register`
 Creates a new player account and returns a JWT token.
 
-**Request Body:**
-```json
-{
-  "username": "player1",
-  "email": "player1@example.com",
-  "password": "securepassword123"
-}
-```
+## Endpoints (Monster Module)
 
-**Response (200 OK):**
-```json
-{
-  "token": "eyJhbGciOiJIUz...",
-  "userId": "123e4567-e89b-12d3-a456-426614174000",
-  "username": "player1",
-  "role": "PLAYER"
-}
-```
+### `GET /api/monsters`
+Retrieves a list of all available monsters in the game.
 
-### `POST /auth/login`
-Authenticates a user and returns a JWT token.
+### `GET /api/monsters/{id}`
+Retrieves a single monster's details by its ID.
 
-**Request Body:**
-```json
-{
-  "username": "player1",
-  "password": "securepassword123"
-}
-```
+## Endpoints (Combat Module)
 
-**Response (200 OK):**
-```json
-{
-  "token": "eyJhbGciOiJIUz...",
-  "userId": "123e4567-e89b-12d3-a456-426614174000",
-  "username": "player1",
-  "role": "PLAYER"
-}
-```
+### `POST /api/combat/{characterId}/fight/{monsterId}`
+Executes deterministic combat between a character and a monster and returns the full combat log, XP, Gold, and Loot.
+
+### `GET /api/combat/{characterId}/history`
+Retrieves the combat history for a specific character.
 
 ## Error Handling
 The API follows RFC 7807 Problem Details.
-
-Example Validation Error:
-```json
-{
-  "type": "https://api.rpgengine.com/errors/validation-failed",
-  "title": "Bad Request",
-  "status": 400,
-  "detail": "Validation failed",
-  "errors": {
-    "email": "Email must be valid"
-  }
-}
-```

@@ -1,27 +1,52 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Inventory, getInventory } from '@/lib/api/inventory';
+import { useEffect, useState, useCallback } from 'react';
+import { Inventory, getInventory, InventorySlot } from '@/lib/api/inventory';
+import { equipItem, EquipmentSlot } from '@/lib/api/equipment';
 import { InventoryGrid } from '@/components/inventory/InventoryGrid';
+import { useRouter } from 'next/navigation';
 
 export default function CharacterInventoryPage({ params }: { params: { characterId: string } }) {
   const [inventory, setInventory] = useState<Inventory | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const router = useRouter();
+
+  const fetchInv = useCallback(async () => {
+    try {
+      const data = await getInventory(params.characterId);
+      setInventory(data);
+    } catch (err: any) {
+      setError(err.message || 'Failed to load inventory');
+    } finally {
+      setLoading(false);
+    }
+  }, [params.characterId]);
 
   useEffect(() => {
-    const fetchInv = async () => {
-      try {
-        const data = await getInventory(params.characterId);
-        setInventory(data);
-      } catch (err: any) {
-        setError(err.message || 'Failed to load inventory');
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchInv();
-  }, [params.characterId]);
+  }, [fetchInv]);
+
+  const handleEquip = async (item: any) => {
+    if (!item) return;
+    
+    // Only equippable categories map to EquipmentSlots
+    const category = item.category;
+    const isEquippable = ['WEAPON', 'HELMET', 'CHEST_ARMOR', 'GLOVES', 'BOOTS'].includes(category);
+    
+    if (!isEquippable) {
+      alert(`Cannot equip ${category}`);
+      return;
+    }
+
+    try {
+      await equipItem(params.characterId, category as EquipmentSlot, item.id);
+      alert('Item equipped successfully!');
+      router.push(`/dashboard/${params.characterId}/equipment`);
+    } catch (err: any) {
+      alert(err.message || 'Failed to equip item');
+    }
+  };
 
   if (loading) {
     return (
@@ -42,8 +67,14 @@ export default function CharacterInventoryPage({ params }: { params: { character
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <InventoryGrid inventory={inventory} onItemClick={() => {}} />
+    <div className="max-w-4xl mx-auto space-y-6">
+      <div className="flex justify-between items-end">
+        <div>
+          <h2 className="text-2xl font-pixel text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">Inventory</h2>
+          <p className="text-sm text-gray-400 font-pixel mt-2">Click an item to equip it.</p>
+        </div>
+      </div>
+      <InventoryGrid inventory={inventory} onItemClick={handleEquip} />
     </div>
   );
 }

@@ -17,7 +17,9 @@ export default function CharacterLayout({
   const tabs = [
     { name: 'Dashboard', path: `/dashboard/${characterId}` },
     { name: 'Inventory', path: `/dashboard/${characterId}/inventory` },
-    { name: 'Equipment', path: `/dashboard/${characterId}/equipment` }
+    { name: 'Equipment', path: `/dashboard/${characterId}/equipment` },
+    { name: 'Monsters', path: `/dashboard/${characterId}/monsters` },
+    { name: 'History', path: `/dashboard/${characterId}/history` }
   ];
 
   return (
