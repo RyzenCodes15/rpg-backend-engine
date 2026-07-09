@@ -4,7 +4,7 @@ import { ItemTooltip } from './ItemTooltip';
 
 interface InventoryGridProps {
   inventory: Inventory | null;
-  onItemClick?: (item: Item) => void;
+  onItemClick?: (slot: Slot) => void;
 }
 
 export const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, onItemClick }) => {
@@ -43,7 +43,7 @@ export const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, onItemC
               aspect-square bg-rpg-bg flex items-center justify-center relative transition-colors pixel-border border-4
               ${slot ? 'cursor-pointer ' + getRarityBorder(slot.item.rarity) : 'border-rpg-border/50'}
             `}
-            onClick={() => slot && onItemClick && onItemClick(slot.item)}
+            onClick={() => slot && onItemClick && onItemClick(slot)}
           >
             {slot ? (
               <ItemTooltip item={slot.item}>

@@ -44,3 +44,9 @@ export const addTestItem = async (characterId: string, itemId: string, quantity:
     method: 'POST',
   });
 };
+
+export const useItem = async (characterId: string, slotId: string): Promise<void> => {
+  await apiFetch(`/characters/${characterId}/inventory/slots/${slotId}/use`, {
+    method: 'POST',
+  });
+};

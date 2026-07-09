@@ -21,7 +21,7 @@ public class CombatEngine {
         // Calculate total character stats including equipment
         CharacterStats totalStats = calculateTotalStats(character.getBaseStats(), equipment);
         
-        int charHealth = totalStats.health();
+        int charHealth = character.getCurrentHealth();
         int monsterHealth = monster.getHealth();
         
         int damageDealtToMonster = 0;
@@ -36,8 +36,6 @@ public class CombatEngine {
             if (charTurn) {
                 // Apply effects to char
                 boolean canAct = applyEffects(charEffects, character.getName(), log, charHealth);
-                // Updating charHealth would require returning it from applyEffects, let's simplify for now
-                // or just not have status effects affect max health directly in this loop
                 
                 if (canAct && charHealth > 0) {
                     // Character attacks
@@ -76,6 +74,9 @@ public class CombatEngine {
             monsterEffects.removeIf(StatusEffect::isExpired);
         }
 
+        // Ensure charHealth doesn't go below 0
+        charHealth = Math.max(0, charHealth);
+
         boolean isVictory = charHealth > 0;
         
         if (isVictory) {
@@ -87,7 +88,7 @@ public class CombatEngine {
         long goldEarned = isVictory ? monster.getGoldReward() : 0;
         long expEarned = isVictory ? monster.getExperienceReward() : 0;
 
-        return new CombatResult(isVictory, damageDealtToMonster, damageTakenByChar, goldEarned, expEarned, log);
+        return new CombatResult(isVictory, damageDealtToMonster, damageTakenByChar, goldEarned, expEarned, charHealth, log);
     }
 
     private boolean applyEffects(List<StatusEffect> effects, String targetName, CombatLog log, int currentHealth) {

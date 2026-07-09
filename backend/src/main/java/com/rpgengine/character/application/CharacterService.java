@@ -62,4 +62,9 @@ public class CharacterService {
         }
         characterRepository.deleteById(characterId);
     }
+
+    @Transactional
+    public Character updateCharacter(Character character) {
+        return characterRepository.save(character);
+    }
 }

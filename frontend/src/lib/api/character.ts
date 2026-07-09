@@ -16,6 +16,8 @@ export interface Character {
   level: number;
   experience: number;
   gold: number;
+  currentHealth: number;
+  currentMana: number;
   baseStats: CharacterStats;
 }
 
@@ -43,6 +45,12 @@ export const deleteCharacter = async (id: string): Promise<void> => {
 // Development / Testing
 export const addExperience = async (characterId: string, amount: number = 1000): Promise<void> => {
   await apiFetch(`/characters/${characterId}/exp?amount=${amount}`, {
+    method: 'POST',
+  });
+};
+
+export const restAtCamp = async (characterId: string): Promise<Character> => {
+  return apiFetch(`/camp/rest/${characterId}`, {
     method: 'POST',
   });
 };

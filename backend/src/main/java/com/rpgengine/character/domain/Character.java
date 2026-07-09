@@ -11,13 +11,15 @@ public class Character {
     private int level;
     private long experience;
     private long gold;
+    private int currentHealth;
+    private int currentMana;
     private CharacterStats baseStats;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public Character() {}
 
-    public Character(UUID id, UUID userId, String name, CharacterClass characterClass, int level, long experience, long gold, CharacterStats baseStats, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Character(UUID id, UUID userId, String name, CharacterClass characterClass, int level, long experience, long gold, int currentHealth, int currentMana, CharacterStats baseStats, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -25,6 +27,8 @@ public class Character {
         this.level = level;
         this.experience = experience;
         this.gold = gold;
+        this.currentHealth = currentHealth;
+        this.currentMana = currentMana;
         this.baseStats = baseStats;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -42,6 +46,8 @@ public class Character {
                 1,
                 0L,
                 0L,
+                initialStats.health(),
+                initialStats.mana(),
                 initialStats,
                 LocalDateTime.now(),
                 LocalDateTime.now()
@@ -64,6 +70,10 @@ public class Character {
             StatGrowthStrategy strategy = StatGrowthStrategyFactory.getStrategy(this.characterClass);
             this.baseStats = this.baseStats.add(strategy.getGrowthPerLevel());
             
+            // Fully restore HP and Mana on level up
+            this.currentHealth = this.baseStats.health();
+            this.currentMana = this.baseStats.mana();
+            
             requiredExp = this.level * 1000L;
         }
         this.updatedAt = LocalDateTime.now();
@@ -84,6 +94,10 @@ public class Character {
     public void setExperience(long experience) { this.experience = experience; }
     public long getGold() { return gold; }
     public void setGold(long gold) { this.gold = gold; }
+    public int getCurrentHealth() { return currentHealth; }
+    public void setCurrentHealth(int currentHealth) { this.currentHealth = currentHealth; }
+    public int getCurrentMana() { return currentMana; }
+    public void setCurrentMana(int currentMana) { this.currentMana = currentMana; }
     public CharacterStats getBaseStats() { return baseStats; }
     public void setBaseStats(CharacterStats baseStats) { this.baseStats = baseStats; }
     public LocalDateTime getCreatedAt() { return createdAt; }

@@ -12,6 +12,8 @@ public record CharacterResponse(
         int level,
         long experience,
         long gold,
+        int currentHealth,
+        int currentMana,
         CharacterStats baseStats
 ) {
     public static CharacterResponse fromDomain(Character character) {
@@ -22,6 +24,8 @@ public record CharacterResponse(
                 character.getLevel(),
                 character.getExperience(),
                 character.getGold(),
+                character.getCurrentHealth(),
+                character.getCurrentMana(),
                 character.getBaseStats()
         );
     }

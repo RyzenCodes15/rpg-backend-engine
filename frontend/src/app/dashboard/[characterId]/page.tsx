@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Character, getCharacter, deleteCharacter, addExperience } from '@/lib/api/character';
 import { addTestItem } from '@/lib/api/inventory';
 import { combatApi, CombatHistoryResponse } from '@/lib/api/combat';
+import { getEquipment, Equipment } from '@/lib/api/equipment';
 import { StatBar } from '@/components/character/StatBar';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
@@ -12,17 +13,20 @@ import Link from 'next/link';
 export default function CharacterDashboardPage({ params }: { params: { characterId: string } }) {
   const [character, setCharacter] = useState<Character | null>(null);
   const [recentCombat, setRecentCombat] = useState<CombatHistoryResponse | null>(null);
+  const [equipment, setEquipment] = useState<Equipment | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const router = useRouter();
 
   const fetchData = async () => {
     try {
-      const [charData, historyData] = await Promise.all([
+      const [charData, historyData, eqData] = await Promise.all([
         getCharacter(params.characterId),
-        combatApi.getHistory(params.characterId).catch(() => [])
+        combatApi.getHistory(params.characterId).catch(() => []),
+        getEquipment(params.characterId).catch(() => null)
       ]);
       setCharacter(charData);
+      setEquipment(eqData);
       if (historyData && historyData.length > 0) {
         setRecentCombat(historyData[0]);
       }
@@ -41,6 +45,8 @@ export default function CharacterDashboardPage({ params }: { params: { character
     if (confirm('Are you sure you want to delete this character forever?')) {
       try {
         await deleteCharacter(params.characterId);
+        alert('Character deleted successfully.');
+        router.refresh();
         router.push('/dashboard/select');
       } catch (err: any) {
         alert('Failed to delete character');
@@ -88,6 +94,34 @@ export default function CharacterDashboardPage({ params }: { params: { character
   }
 
   const expToNextLevel = character.level * 1000;
+
+  const getTotalStats = () => {
+    const base = character.baseStats;
+    let maxHp = base.health;
+    let maxMp = base.mana;
+    let atk = base.attack;
+    let def = base.defense;
+    let spd = base.speed;
+    let crit = base.criticalChance;
+
+    if (equipment) {
+      const items = [equipment.weapon, equipment.helmet, equipment.chestArmor, equipment.gloves, equipment.boots];
+      items.forEach(item => {
+        if (item && item.stats) {
+          maxHp += item.stats.bonusHealth || 0;
+          maxMp += item.stats.bonusMana || 0;
+          atk += item.stats.bonusAttack || 0;
+          def += item.stats.bonusDefense || 0;
+          spd += item.stats.bonusSpeed || 0;
+          crit += item.stats.bonusCriticalChance || 0;
+        }
+      });
+    }
+
+    return { maxHp, maxMp, atk, def, spd, crit };
+  };
+
+  const stats = getTotalStats();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -168,9 +202,21 @@ export default function CharacterDashboardPage({ params }: { params: { character
       {/* Right Column: Stats and Vitals */}
       <div className="space-y-8">
         <div className="bg-rpg-surface border-4 border-rpg-border p-6 pixel-border space-y-6">
-          <h3 className="font-pixel text-lg text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] mb-4">Vitals</h3>
-          <StatBar label="HP" current={character.baseStats.health} max={character.baseStats.health} color="red" />
-          <StatBar label="MP" current={character.baseStats.mana} max={character.baseStats.mana} color="blue" />
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-pixel text-lg text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">Vitals</h3>
+            <Button variant="secondary" onClick={async () => {
+              try {
+                await import('@/lib/api/character').then(m => m.restAtCamp(params.characterId));
+                alert('Rested at camp. HP and Mana fully restored!');
+                fetchData();
+                router.refresh();
+              } catch (err: any) {
+                alert('Failed to rest: ' + err.message);
+              }
+            }}>🏕️ Rest at Camp</Button>
+          </div>
+          <StatBar label="HP" current={character.currentHealth} max={stats.maxHp} color="red" />
+          <StatBar label="MP" current={character.currentMana} max={stats.maxMp} color="blue" />
           <StatBar label="EXP" current={character.experience} max={expToNextLevel} color="yellow" />
         </div>
 
@@ -179,19 +225,19 @@ export default function CharacterDashboardPage({ params }: { params: { character
           <div className="grid grid-cols-2 gap-6">
             <div className="bg-rpg-bg border-4 border-rpg-border p-3 pixel-border">
               <span className="block font-retro text-lg text-rpg-text">Attack</span>
-              <span className="font-pixel text-white text-lg">{character.baseStats.attack}</span>
+              <span className="font-pixel text-white text-lg">{stats.atk}</span>
             </div>
             <div className="bg-rpg-bg border-4 border-rpg-border p-3 pixel-border">
               <span className="block font-retro text-lg text-rpg-text">Defense</span>
-              <span className="font-pixel text-white text-lg">{character.baseStats.defense}</span>
+              <span className="font-pixel text-white text-lg">{stats.def}</span>
             </div>
             <div className="bg-rpg-bg border-4 border-rpg-border p-3 pixel-border">
               <span className="block font-retro text-lg text-rpg-text">Speed</span>
-              <span className="font-pixel text-white text-lg">{character.baseStats.speed}</span>
+              <span className="font-pixel text-white text-lg">{stats.spd}</span>
             </div>
             <div className="bg-rpg-bg border-4 border-rpg-border p-3 pixel-border">
               <span className="block font-retro text-lg text-rpg-text">Crit %</span>
-              <span className="font-pixel text-white text-lg">{character.baseStats.criticalChance}</span>
+              <span className="font-pixel text-white text-lg">{stats.crit}</span>
             </div>
           </div>
         </div>

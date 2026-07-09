@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { combatApi, CombatResponse, CombatEvent } from '@/lib/api/combat';
-import { getCharacter } from '@/lib/api/character';
+import { getCharacter, Character } from '@/lib/api/character';
 import { monsterApi, Monster } from '@/lib/api/monsters';
+import { getEquipment, Equipment } from '@/lib/api/equipment';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
@@ -11,8 +12,9 @@ import { useRouter } from 'next/navigation';
 export default function CombatPage({ params }: { params: { characterId: string, monsterId: string } }) {
   const router = useRouter();
   const [combatResult, setCombatResult] = useState<CombatResponse | null>(null);
-  const [character, setCharacter] = useState<any>(null);
+  const [character, setCharacter] = useState<Character | null>(null);
   const [monster, setMonster] = useState<Monster | null>(null);
+  const [equipment, setEquipment] = useState<Equipment | null>(null);
   const [loading, setLoading] = useState(true);
   
   // Animation state
@@ -30,18 +32,31 @@ export default function CombatPage({ params }: { params: { characterId: string, 
   useEffect(() => {
     const initCombat = async () => {
       try {
-        const [charData, monsterData, result] = await Promise.all([
+        const [charData, monsterData, eqData, result] = await Promise.all([
           getCharacter(params.characterId),
           monsterApi.getById(params.monsterId),
+          getEquipment(params.characterId).catch(() => null),
           combatApi.fight(params.characterId, params.monsterId)
         ]);
         
         setCharacter(charData);
         setMonster(monsterData);
+        setEquipment(eqData);
         setCombatResult(result);
         
         // Use total stats if available, otherwise fallback
-        const maxHp = charData.baseStats.health + ((charData as any).equipmentStats?.bonusHealth || 0);
+        let bonusHp = 0;
+        if (eqData) {
+          const items = [eqData.weapon, eqData.helmet, eqData.chestArmor, eqData.gloves, eqData.boots];
+          items.forEach(item => {
+            if (item && item.stats && item.stats.bonusHealth) {
+              bonusHp += item.stats.bonusHealth;
+            }
+          });
+        }
+        
+        const maxHp = charData.baseStats.health + bonusHp;
+        // Current HP is the maxHp at the start of combat in this frontend simulation
         setCharCurrentHp(maxHp);
         setMonsterCurrentHp(monsterData.health);
         
@@ -127,7 +142,16 @@ export default function CombatPage({ params }: { params: { characterId: string, 
     return <div className="text-center p-8 text-rpg-error font-pixel">Battle failed to initialize.</div>;
   }
 
-  const charMaxHp = character.baseStats.health + ((character as any).equipmentStats?.bonusHealth || 0);
+  let bonusHp = 0;
+  if (equipment) {
+    const items = [equipment.weapon, equipment.helmet, equipment.chestArmor, equipment.gloves, equipment.boots];
+    items.forEach(item => {
+      if (item && item.stats && item.stats.bonusHealth) {
+        bonusHp += item.stats.bonusHealth;
+      }
+    });
+  }
+  const charMaxHp = character.baseStats.health + bonusHp;
   const monsterMaxHp = monster.health;
 
   return (
@@ -263,10 +287,16 @@ export default function CombatPage({ params }: { params: { characterId: string, 
           )}
 
           <div className="flex justify-center gap-4">
-            <Button onClick={() => router.push(`/dashboard/${params.characterId}/monsters`)}>
+            <Button onClick={() => {
+              router.refresh();
+              router.push(`/dashboard/${params.characterId}/monsters`);
+            }}>
               Back to Monsters
             </Button>
-            <Button variant="secondary" onClick={() => router.push(`/dashboard/${params.characterId}`)}>
+            <Button variant="secondary" onClick={() => {
+              router.refresh();
+              router.push(`/dashboard/${params.characterId}`);
+            }}>
               Back to Dashboard
             </Button>
           </div>

@@ -42,8 +42,14 @@ public class CharacterJpaEntity {
     @Column(nullable = false)
     private int health;
     
+    @Column(name = "current_health", nullable = false)
+    private int currentHealth;
+    
     @Column(nullable = false)
     private int mana;
+    
+    @Column(name = "current_mana", nullable = false)
+    private int currentMana;
     
     @Column(nullable = false)
     private int attack;
@@ -82,8 +88,12 @@ public class CharacterJpaEntity {
     public void setGold(long gold) { this.gold = gold; }
     public int getHealth() { return health; }
     public void setHealth(int health) { this.health = health; }
+    public int getCurrentHealth() { return currentHealth; }
+    public void setCurrentHealth(int currentHealth) { this.currentHealth = currentHealth; }
     public int getMana() { return mana; }
     public void setMana(int mana) { this.mana = mana; }
+    public int getCurrentMana() { return currentMana; }
+    public void setCurrentMana(int currentMana) { this.currentMana = currentMana; }
     public int getAttack() { return attack; }
     public void setAttack(int attack) { this.attack = attack; }
     public int getDefense() { return defense; }

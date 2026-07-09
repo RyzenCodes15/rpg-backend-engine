@@ -19,6 +19,7 @@ export default function CreateCharacterPage() {
 
     try {
       await createCharacter(name, characterClass);
+      router.refresh();
       router.push('/dashboard/select');
     } catch (err: any) {
       setError(err.message || 'Failed to create character');

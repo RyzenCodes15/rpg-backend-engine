@@ -65,6 +65,10 @@ public class CombatService {
                 }
             }
         }
+        
+        // Update character health regardless of victory or defeat
+        character.setCurrentHealth(result.finalCharacterHealth());
+        characterService.updateCharacter(character);
 
         // Save history
         CombatHistory history = new CombatHistory(

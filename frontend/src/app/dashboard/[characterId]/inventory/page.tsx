@@ -27,11 +27,24 @@ export default function CharacterInventoryPage({ params }: { params: { character
     fetchInv();
   }, [fetchInv]);
 
-  const handleEquip = async (item: any) => {
-    if (!item) return;
+  const handleEquip = async (slot: InventorySlot) => {
+    if (!slot) return;
     
-    // Only equippable categories map to EquipmentSlots
+    const item = slot.item;
     const category = item.category;
+    
+    if (category === 'CONSUMABLE') {
+      try {
+        await import('@/lib/api/inventory').then(m => m.useItem(params.characterId, slot.id));
+        alert(`Used ${item.name}!`);
+        fetchInv();
+        router.refresh();
+      } catch (err: any) {
+        alert(err.message || 'Failed to use item');
+      }
+      return;
+    }
+
     const isEquippable = ['WEAPON', 'HELMET', 'CHEST_ARMOR', 'GLOVES', 'BOOTS'].includes(category);
     
     if (!isEquippable) {
@@ -42,6 +55,7 @@ export default function CharacterInventoryPage({ params }: { params: { character
     try {
       await equipItem(params.characterId, category as EquipmentSlot, item.id);
       alert('Item equipped successfully!');
+      router.refresh();
       router.push(`/dashboard/${params.characterId}/equipment`);
     } catch (err: any) {
       alert(err.message || 'Failed to equip item');
@@ -71,7 +85,7 @@ export default function CharacterInventoryPage({ params }: { params: { character
       <div className="flex justify-between items-end">
         <div>
           <h2 className="text-2xl font-pixel text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">Inventory</h2>
-          <p className="text-sm text-gray-400 font-pixel mt-2">Click an item to equip it.</p>
+          <p className="text-sm text-gray-400 font-pixel mt-2">Click an item to equip or use it.</p>
         </div>
       </div>
       <InventoryGrid inventory={inventory} onItemClick={handleEquip} />

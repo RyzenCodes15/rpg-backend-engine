@@ -6,5 +6,6 @@ public record CombatResult(
         int damageTaken,
         long goldEarned,
         long experienceEarned,
+        int finalCharacterHealth,
         CombatLog log
 ) {}

@@ -15,11 +15,9 @@ const colorMap = {
 };
 
 export const StatBar: React.FC<StatBarProps> = ({ label, current, max, color }) => {
-  const percentage = Math.min(100, Math.max(0, (current / max) * 100));
-
-  // Stepped percentage for retro feel
-  const steps = 20; // 5% increments
-  const steppedPercentage = Math.round((percentage / 100) * steps) * (100 / steps);
+  const maxSafe = Math.max(1, max || 1);
+  const currentSafe = current || 0;
+  const percentage = Math.min(100, Math.max(0, (currentSafe / maxSafe) * 100));
 
   return (
     <div className="flex items-center gap-4 text-sm">
@@ -29,11 +27,11 @@ export const StatBar: React.FC<StatBarProps> = ({ label, current, max, color }) 
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(to right, #ffffff 1px, transparent 1px)', backgroundSize: '5% 100%' }}></div>
         <div 
           className={`h-full ${colorMap[color]} transition-all duration-300 ease-linear`}
-          style={{ width: `${steppedPercentage}%` }}
+          style={{ width: `${percentage}%` }}
         />
       </div>
       <span className="w-20 text-right font-retro text-xl text-white">
-        {current}/{max}
+        {currentSafe}/{maxSafe}
       </span>
     </div>
   );

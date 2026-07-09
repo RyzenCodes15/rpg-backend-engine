@@ -59,4 +59,20 @@ public class InventoryController {
         inventoryService.addItem(characterId, itemId, quantity);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/slots/{slotId}/use")
+    @Operation(summary = "Use an item from the inventory")
+    public ResponseEntity<Void> useItem(
+            @AuthenticationPrincipal(expression = "id") UUID userId,
+            @PathVariable UUID characterId,
+            @PathVariable UUID slotId) {
+            
+        Character character = characterService.getCharacter(characterId);
+        if (!character.getUserId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        inventoryService.useItem(characterId, slotId);
+        return ResponseEntity.ok().build();
+    }
 }

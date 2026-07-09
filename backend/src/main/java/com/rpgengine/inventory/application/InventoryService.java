@@ -16,10 +16,12 @@ public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
     private final ItemRepository itemRepository;
+    private final com.rpgengine.character.domain.repository.CharacterRepository characterRepository;
 
-    public InventoryService(InventoryRepository inventoryRepository, ItemRepository itemRepository) {
+    public InventoryService(InventoryRepository inventoryRepository, ItemRepository itemRepository, com.rpgengine.character.domain.repository.CharacterRepository characterRepository) {
         this.inventoryRepository = inventoryRepository;
         this.itemRepository = itemRepository;
+        this.characterRepository = characterRepository;
     }
 
     @Transactional
@@ -47,6 +49,38 @@ public class InventoryService {
     public void removeItemSlot(UUID characterId, UUID slotId) {
         Inventory inventory = getInventoryByCharacterId(characterId);
         inventory.removeItemSlot(slotId);
+        inventoryRepository.save(inventory);
+    }
+
+    @Transactional
+    public void useItem(UUID characterId, UUID slotId) {
+        Inventory inventory = getInventoryByCharacterId(characterId);
+        com.rpgengine.inventory.domain.InventorySlot slot = inventory.getSlots().stream()
+                .filter(s -> s.getId().equals(slotId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Slot not found"));
+
+        Item item = slot.getItem();
+        if (item.getCategory() != com.rpgengine.inventory.domain.ItemCategory.CONSUMABLE) {
+            throw new IllegalArgumentException("Item is not consumable");
+        }
+
+        com.rpgengine.character.domain.Character character = characterRepository.findById(characterId)
+                .orElseThrow(() -> new ResourceNotFoundException("Character not found"));
+
+        // Heal character
+        int healingAmount = item.getStats().bonusHealth();
+        int maxHealth = character.getBaseStats().health();
+        int newHealth = Math.min(maxHealth, character.getCurrentHealth() + healingAmount);
+        character.setCurrentHealth(newHealth);
+        characterRepository.save(character);
+
+        // Consume item
+        if (slot.getQuantity() > 1) {
+            slot.removeQuantity(1);
+        } else {
+            inventory.removeItemSlot(slotId);
+        }
         inventoryRepository.save(inventory);
     }
 }

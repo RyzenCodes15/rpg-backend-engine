@@ -53,6 +53,8 @@ public class CharacterRepositoryImpl implements CharacterRepository {
         entity.setLevel(character.getLevel());
         entity.setExperience(character.getExperience());
         entity.setGold(character.getGold());
+        entity.setCurrentHealth(character.getCurrentHealth());
+        entity.setCurrentMana(character.getCurrentMana());
         if (character.getBaseStats() != null) {
             entity.setHealth(character.getBaseStats().health());
             entity.setMana(character.getBaseStats().mana());
@@ -83,6 +85,8 @@ public class CharacterRepositoryImpl implements CharacterRepository {
                 entity.getLevel(),
                 entity.getExperience(),
                 entity.getGold(),
+                entity.getCurrentHealth(),
+                entity.getCurrentMana(),
                 stats,
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
