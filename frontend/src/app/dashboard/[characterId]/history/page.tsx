@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { combatApi, CombatHistoryResponse } from '@/lib/api/combat';
 import { monsterApi, Monster } from '@/lib/api/monsters';
 import { Card } from '@/components/ui/Card';
+import Image from 'next/image';
 
 export default function CombatHistoryPage({ params }: { params: { characterId: string } }) {
   const [history, setHistory] = useState<CombatHistoryResponse[]>([]);
@@ -59,6 +60,19 @@ export default function CombatHistoryPage({ params }: { params: { characterId: s
               <Card key={record.id} className="p-4 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4 w-full md:w-auto">
                   <div className={`w-3 h-16 ${record.isVictory ? 'bg-green-500' : 'bg-red-500'} rounded-full`} />
+                  <div className="relative w-16 h-16 border-2 border-rpg-border pixel-border shrink-0 bg-black">
+                    {monster && (
+                      <Image 
+                        src={`/assets/monsters/${monster.name.toLowerCase()}.png`}
+                        alt={monster.name}
+                        fill
+                        className="object-cover pixelated"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJibGFjayIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjUwIiBmaWxsPSJyZWQiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4/PC90ZXh0Pjwvc3ZnPg==';
+                        }}
+                      />
+                    )}
+                  </div>
                   <div>
                     <h3 className="font-pixel text-lg text-white">
                       vs {monster ? monster.name : 'Unknown Monster'}

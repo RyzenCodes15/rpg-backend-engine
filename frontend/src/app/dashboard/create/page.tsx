@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createCharacter } from '@/lib/api/character';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function CreateCharacterPage() {
   const [name, setName] = useState('');
@@ -81,6 +82,16 @@ export default function CreateCharacterPage() {
                 <h3 className={`font-pixel text-sm drop-shadow-[1px_1px_0px_rgba(0,0,0,1)] mb-3 ${characterClass === cls.id ? 'text-rpg-primary' : 'text-white'}`}>
                   {cls.name}
                 </h3>
+                <div className="flex justify-center mb-4">
+                  <div className={`relative w-24 h-24 border-4 pixel-border transition-colors ${characterClass === cls.id ? 'border-rpg-primary' : 'border-rpg-border'}`}>
+                    <Image 
+                      src={`/assets/heroes/${cls.id.toLowerCase()}.png`}
+                      alt={cls.name}
+                      fill
+                      className="object-cover pixelated"
+                    />
+                  </div>
+                </div>
                 <p className="text-lg text-rpg-text">{cls.desc}</p>
               </div>
             ))}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Equipment, EquipmentSlot } from '@/lib/api/equipment';
 import { Item } from '@/lib/api/inventory';
 import { ItemTooltip } from '../inventory/ItemTooltip';
+import Image from 'next/image';
 
 interface EquipmentPanelProps {
   equipment: Equipment | null;
@@ -36,9 +37,14 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
       >
         {item ? (
           <ItemTooltip item={item}>
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="font-pixel text-xs md:text-sm text-white drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">
-                {item.name.substring(0, 3).toUpperCase()}
+            <div className="w-full h-full flex items-center justify-center p-2">
+              <div className="relative w-full h-full">
+                <Image 
+                  src={`/assets/items/${item.category.toLowerCase()}.png`}
+                  alt={item.name}
+                  fill
+                  className="object-contain pixelated drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]"
+                />
               </div>
             </div>
           </ItemTooltip>

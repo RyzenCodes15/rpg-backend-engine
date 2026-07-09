@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { monsterApi, Monster } from '@/lib/api/monsters';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import Image from 'next/image';
 
 export default function MonstersPage({ params }: { params: { characterId: string } }) {
   const router = useRouter();
@@ -44,9 +45,24 @@ export default function MonstersPage({ params }: { params: { characterId: string
         {monsters.map((monster) => (
           <Card key={monster.id} className="flex flex-col h-full bg-rpg-surface border-4 border-rpg-border p-4">
             <div className="flex-1">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl font-pixel text-rpg-primary">{monster.name}</h3>
-                <span className="text-sm font-pixel text-gray-400">Lvl {monster.level}</span>
+              <div className="flex gap-4 mb-4 border-b-4 border-rpg-border pb-4">
+                <div className="relative w-24 h-24 border-4 border-rpg-border pixel-border shrink-0 bg-black">
+                  <Image 
+                    src={`/assets/monsters/${monster.name.toLowerCase()}.png`}
+                    alt={monster.name}
+                    fill
+                    className="object-cover pixelated"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJibGFjayIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjUwIiBmaWxsPSJyZWQiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4/PC90ZXh0Pjwvc3ZnPg==';
+                    }}
+                  />
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-pixel text-rpg-primary drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">{monster.name}</h3>
+                  </div>
+                  <span className="text-sm font-pixel text-white bg-rpg-bg border-2 border-rpg-border px-2 py-1 drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">Lvl {monster.level}</span>
+                </div>
               </div>
               <p className="text-sm text-gray-300 mb-4">{monster.description}</p>
               

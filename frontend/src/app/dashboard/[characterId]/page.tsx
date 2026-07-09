@@ -9,6 +9,7 @@ import { getEquipment, Equipment } from '@/lib/api/equipment';
 import { StatBar } from '@/components/character/StatBar';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function CharacterDashboardPage({ params }: { params: { characterId: string } }) {
   const [character, setCharacter] = useState<Character | null>(null);
@@ -131,8 +132,13 @@ export default function CharacterDashboardPage({ params }: { params: { character
         {/* Character Identity */}
         <div className="bg-rpg-surface border-4 border-rpg-border p-6 pixel-border">
           <div className="flex gap-6 items-start">
-            <div className="w-32 h-32 bg-rpg-bg border-4 border-rpg-border pixel-border flex items-center justify-center shrink-0">
-              <span className="text-4xl">🧑‍🚀</span> {/* Placeholder portrait */}
+            <div className="relative w-32 h-32 border-4 border-rpg-border pixel-border shrink-0">
+              <Image 
+                src={`/assets/heroes/${character.characterClass.toLowerCase()}.png`}
+                alt={character.characterClass}
+                fill
+                className="object-cover pixelated"
+              />
             </div>
             <div className="flex-1">
               <h2 className="text-2xl md:text-3xl font-pixel text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] mb-2 uppercase break-all">

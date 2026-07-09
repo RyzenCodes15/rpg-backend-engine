@@ -8,6 +8,7 @@ import { getEquipment, Equipment } from '@/lib/api/equipment';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function CombatPage({ params }: { params: { characterId: string, monsterId: string } }) {
   const router = useRouter();
@@ -185,7 +186,14 @@ export default function CombatPage({ params }: { params: { characterId: string, 
             </div>
           </div>
           <div className="h-32 bg-black/30 border-2 border-rpg-border flex items-center justify-center relative">
-            <div className={`w-16 h-16 bg-rpg-primary ${activeTurn === character.name ? 'animate-bounce' : ''}`} />
+            <div className={`relative w-24 h-24 ${activeTurn === character.name ? 'animate-bounce' : ''}`}>
+              <Image 
+                src={`/assets/heroes/${character.characterClass.toLowerCase()}.png`}
+                alt={character.characterClass}
+                fill
+                className="object-cover pixelated"
+              />
+            </div>
             
             {/* Floating Damage Text */}
             {charDamageText.map(dmg => (
@@ -222,7 +230,17 @@ export default function CombatPage({ params }: { params: { characterId: string, 
             </div>
           </div>
           <div className="h-32 bg-black/30 border-2 border-rpg-border flex items-center justify-center relative">
-            <div className={`w-16 h-16 bg-rpg-error ${activeTurn === monster.name ? 'animate-bounce' : ''}`} />
+            <div className={`relative w-24 h-24 ${activeTurn === monster.name ? 'animate-bounce' : ''}`}>
+              <Image 
+                src={`/assets/monsters/${monster.name.toLowerCase()}.png`}
+                alt={monster.name}
+                fill
+                className="object-cover pixelated"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJibGFjayIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjUwIiBmaWxsPSJyZWQiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4/PC90ZXh0Pjwvc3ZnPg==';
+                }}
+              />
+            </div>
 
             {/* Floating Damage Text */}
             {monsterDamageText.map(dmg => (

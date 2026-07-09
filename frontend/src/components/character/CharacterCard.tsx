@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Character } from '@/lib/api/character';
+import Image from 'next/image';
 
 interface CharacterCardProps {
   character: Character;
@@ -11,11 +12,21 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({ character }) => {
     <Link href={`/dashboard/${character.id}`}>
       <div className="bg-rpg-surface border-4 border-rpg-border hover:border-rpg-primary transition-all p-5 cursor-pointer group pixel-border h-full flex flex-col">
         <div className="flex justify-between items-start mb-4 border-b-4 border-rpg-border pb-3">
-          <div>
-            <h3 className="text-xl font-pixel text-white group-hover:text-rpg-primary transition-colors drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] break-all">{character.name}</h3>
-            <p className="text-sm text-rpg-text font-retro tracking-wider mt-1">{character.characterClass}</p>
+          <div className="flex gap-4">
+            <div className="relative w-16 h-16 border-2 border-rpg-border pixel-border shrink-0">
+              <Image 
+                src={`/assets/heroes/${character.characterClass.toLowerCase()}.png`}
+                alt={character.characterClass}
+                fill
+                className="object-cover pixelated"
+              />
+            </div>
+            <div>
+              <h3 className="text-xl font-pixel text-white group-hover:text-rpg-primary transition-colors drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] break-all line-clamp-2">{character.name}</h3>
+              <p className="text-sm text-rpg-text font-retro tracking-wider mt-1">{character.characterClass}</p>
+            </div>
           </div>
-          <div className="bg-rpg-bg text-white px-3 py-1 font-pixel text-xs border-2 border-rpg-border drop-shadow-[1px_1px_0px_rgba(0,0,0,1)] whitespace-nowrap">
+          <div className="bg-rpg-bg text-white px-3 py-1 font-pixel text-xs border-2 border-rpg-border drop-shadow-[1px_1px_0px_rgba(0,0,0,1)] whitespace-nowrap ml-2">
             Lvl {character.level}
           </div>
         </div>
