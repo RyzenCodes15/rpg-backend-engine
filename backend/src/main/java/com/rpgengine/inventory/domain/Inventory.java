@@ -51,6 +51,33 @@ public class Inventory {
         slots.removeIf(slot -> slot.getId().equals(slotId));
     }
 
+    public boolean hasItem(UUID itemId, int requiredQuantity) {
+        int total = slots.stream()
+                .filter(slot -> slot.getItem().getId().equals(itemId))
+                .mapToInt(InventorySlot::getQuantity)
+                .sum();
+        return total >= requiredQuantity;
+    }
+
+    public void consumeItem(UUID itemId, int quantityToConsume) {
+        if (!hasItem(itemId, quantityToConsume)) {
+            throw new IllegalStateException("Not enough items");
+        }
+        int remainingToConsume = quantityToConsume;
+        for (int i = slots.size() - 1; i >= 0; i--) {
+            InventorySlot slot = slots.get(i);
+            if (slot.getItem().getId().equals(itemId)) {
+                if (slot.getQuantity() > remainingToConsume) {
+                    slot.removeQuantity(remainingToConsume);
+                    break;
+                } else {
+                    remainingToConsume -= slot.getQuantity();
+                    slots.remove(i);
+                }
+            }
+        }
+    }
+
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
     public UUID getCharacterId() { return characterId; }

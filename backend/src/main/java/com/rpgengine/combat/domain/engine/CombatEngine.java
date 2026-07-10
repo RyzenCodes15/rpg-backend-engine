@@ -16,102 +16,85 @@ import java.util.Random;
 public class CombatEngine {
     private final Random random = new Random();
 
-    public CombatResult simulate(Character character, Equipment equipment, Monster monster) {
+    public CombatTurnResult processTurn(CombatSession session, Character character, Equipment equipment, Monster monster, com.rpgengine.skill.domain.Skill chosenSkill) {
         CombatLog log = new CombatLog();
-        
-        // Calculate total character stats including equipment
         CharacterStats totalStats = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment);
         
-        int charHealth = character.getCurrentHealth();
-        int monsterHealth = monster.getHealth();
-        
+        int charHealth = session.getCharacterHp();
+        int monsterHealth = session.getMonsterHp();
+        int charMana = session.getCharacterMana();
+
         int damageDealtToMonster = 0;
         int damageTakenByChar = 0;
-        
-        List<StatusEffect> charEffects = new ArrayList<>();
-        List<StatusEffect> monsterEffects = new ArrayList<>();
 
-        boolean charTurn = totalStats.speed() >= monster.getSpeed();
-
-        while (charHealth > 0 && monsterHealth > 0) {
-            if (charTurn) {
-                // Apply effects to char
-                boolean canAct = applyEffects(charEffects, character.getName(), log, charHealth);
-                
-                if (canAct && charHealth > 0) {
-                    // Character attacks
-                    int damage = calculateDamage(totalStats.attack(), monster.getDefense());
+        // Player Turn
+        if (charHealth > 0) {
+            if (chosenSkill != null) {
+                if (charMana < chosenSkill.getManaCost()) {
+                    log.addEvent(new CombatEvent(character.getName(), "Error", 0, "Not enough mana!"));
+                } else if (session.isSkillOnCooldown(chosenSkill.getId())) {
+                    log.addEvent(new CombatEvent(character.getName(), "Error", 0, "Skill is on cooldown!"));
+                } else {
+                    charMana -= chosenSkill.getManaCost();
+                    session.setCooldown(chosenSkill.getId(), chosenSkill.getCooldown());
                     
-                    // Crit check
-                    boolean isCrit = random.nextDouble() * 100 < totalStats.criticalChance().doubleValue();
-                    if (isCrit) {
-                        damage *= 1.5;
-                    }
-                    
+                    int damage = calculateDamage(totalStats.attack() + chosenSkill.getBaseDamage(), monster.getDefense());
                     monsterHealth -= damage;
                     damageDealtToMonster += damage;
                     
-                    String msg = character.getName() + " attacks " + monster.getName() + " for " + damage + " damage!" + (isCrit ? " (Critical Hit!)" : "");
-                    log.addEvent(new CombatEvent(character.getName(), "Attack", damage, msg));
+                    String msg = character.getName() + " uses " + chosenSkill.getName() + " on " + monster.getName() + " for " + damage + " damage!";
+                    log.addEvent(new CombatEvent(character.getName(), chosenSkill.getName(), damage, msg));
                 }
             } else {
-                // Apply effects to monster
-                boolean canAct = applyEffects(monsterEffects, monster.getName(), log, monsterHealth);
+                // Basic Attack
+                int damage = calculateDamage(totalStats.attack(), monster.getDefense());
+                boolean isCrit = random.nextDouble() * 100 < totalStats.criticalChance().doubleValue();
+                if (isCrit) { damage *= 1.5; }
                 
-                if (canAct && monsterHealth > 0) {
-                    // Monster attacks
-                    int damage = calculateDamage(monster.getAttack(), totalStats.defense());
-                    charHealth -= damage;
-                    damageTakenByChar += damage;
-                    
-                    String msg = monster.getName() + " attacks " + character.getName() + " for " + damage + " damage!";
-                    log.addEvent(new CombatEvent(monster.getName(), "Attack", damage, msg));
-                }
+                monsterHealth -= damage;
+                damageDealtToMonster += damage;
+                
+                String msg = character.getName() + " attacks " + monster.getName() + " for " + damage + " damage!" + (isCrit ? " (Critical Hit!)" : "");
+                log.addEvent(new CombatEvent(character.getName(), "Attack", damage, msg));
             }
-            charTurn = !charTurn;
-            
-            // Clean up expired effects
-            charEffects.removeIf(StatusEffect::isExpired);
-            monsterEffects.removeIf(StatusEffect::isExpired);
         }
 
-        // Ensure charHealth doesn't go below 0
-        charHealth = Math.max(0, charHealth);
+        // Monster Turn
+        if (monsterHealth > 0 && damageDealtToMonster >= 0 /* ensures they didn't just fail to act */) {
+            int damage = calculateDamage(monster.getAttack(), totalStats.defense());
+            charHealth -= damage;
+            damageTakenByChar += damage;
+            
+            String msg = monster.getName() + " attacks " + character.getName() + " for " + damage + " damage!";
+            log.addEvent(new CombatEvent(monster.getName(), "Attack", damage, msg));
+        }
 
-        boolean isVictory = charHealth > 0;
-        
-        if (isVictory) {
-            log.addEvent(new CombatEvent("System", "Victory", 0, character.getName() + " defeated " + monster.getName() + "!"));
-        } else {
-            log.addEvent(new CombatEvent("System", "Defeat", 0, character.getName() + " was defeated by " + monster.getName() + "."));
+        // Clean up session
+        session.decrementCooldowns();
+        session.setCharacterHp(Math.max(0, charHealth));
+        session.setCharacterMana(charMana);
+        session.setMonsterHp(Math.max(0, monsterHealth));
+
+        boolean isFinished = session.getCharacterHp() == 0 || session.getMonsterHp() == 0;
+        boolean isVictory = session.getMonsterHp() == 0;
+
+        if (isFinished) {
+            session.setActive(false);
+            if (isVictory) {
+                log.addEvent(new CombatEvent("System", "Victory", 0, character.getName() + " defeated " + monster.getName() + "!"));
+            } else {
+                log.addEvent(new CombatEvent("System", "Defeat", 0, character.getName() + " was defeated by " + monster.getName() + "."));
+            }
         }
 
         long goldEarned = isVictory ? monster.getGoldReward() : 0;
         long expEarned = isVictory ? monster.getExperienceReward() : 0;
 
-        return new CombatResult(isVictory, damageDealtToMonster, damageTakenByChar, goldEarned, expEarned, charHealth, log);
-    }
-
-    private boolean applyEffects(List<StatusEffect> effects, String targetName, CombatLog log, int currentHealth) {
-        boolean canAct = true;
-        for (StatusEffect effect : effects) {
-            StatusEffect.EffectResult result = effect.apply(currentHealth);
-            log.addEvent(result.event());
-            effect.decrementDuration();
-            if (!result.canAct()) {
-                canAct = false;
-            }
-            // Note: in a fully robust system, the effect result should actually modify currentHealth.
-            // Since this is a simple turn-based auto-resolve, we might just log it or pass health by reference.
-            // For now, we omit complex health updates from status effects to keep it simple.
-        }
-        return canAct;
+        return new CombatTurnResult(isFinished, isVictory, damageDealtToMonster, damageTakenByChar, goldEarned, expEarned, session.getCharacterHp(), session.getCharacterMana(), log);
     }
 
     private int calculateDamage(int attack, int defense) {
-        // Simple formula: Attack - (Defense / 2), minimum 1
         int damage = attack - (defense / 2);
         return Math.max(1, damage);
     }
-
 }

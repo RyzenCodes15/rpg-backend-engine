@@ -2,11 +2,17 @@ import { getToken } from './auth';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
 
-export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
+export interface ApiOptions extends RequestInit {
+  textResponse?: boolean;
+}
+
+export const apiFetch = async (endpoint: string, options: ApiOptions = {}) => {
   const token = getToken();
   
   const headers = new Headers(options.headers);
-  headers.set('Content-Type', 'application/json');
+  if (!options.body || typeof options.body === 'string') {
+    headers.set('Content-Type', 'application/json');
+  }
   
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
@@ -19,12 +25,21 @@ export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(errorData?.title || 'An API error occurred');
+    const errorText = await response.text().catch(() => '');
+    try {
+      const errorData = JSON.parse(errorText);
+      throw new Error(errorData?.title || errorData?.message || 'An API error occurred');
+    } catch {
+      throw new Error(errorText || 'An API error occurred');
+    }
   }
 
   if (response.status === 204) {
     return null;
+  }
+
+  if (options.textResponse) {
+    return response.text();
   }
 
   return response.json();

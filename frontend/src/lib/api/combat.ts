@@ -7,6 +7,17 @@ export interface CombatEvent {
   message: string;
 }
 
+export interface CombatSessionResponse {
+  sessionId: string;
+  characterId: string;
+  monsterId: string;
+  isActive: boolean;
+  characterHp: number;
+  characterMana: number;
+  monsterHp: number;
+  cooldowns: Record<string, number>;
+}
+
 export interface CombatResponse {
   isVictory: boolean;
   damageDealt: number;
@@ -29,10 +40,21 @@ export interface CombatHistoryResponse {
 }
 
 export const combatApi = {
-  fight: async (characterId: string, monsterId: string): Promise<CombatResponse> => {
-    return apiFetch(`/combat/${characterId}/fight/${monsterId}`, { method: 'POST' });
+  startCombat: async (characterId: string, monsterId: string): Promise<CombatSessionResponse> => {
+    return apiFetch(`/combat/${characterId}/start/${monsterId}`, { method: 'POST' });
   },
   
+  executeTurn: async (characterId: string, skillId?: string): Promise<CombatResponse> => {
+    return apiFetch(`/combat/${characterId}/turn`, { 
+        method: 'POST',
+        body: skillId ? JSON.stringify({ skillId }) : undefined
+    });
+  },
+
+  getActiveSession: async (characterId: string): Promise<CombatSessionResponse> => {
+    return apiFetch(`/combat/${characterId}/session`);
+  },
+
   getHistory: async (characterId: string): Promise<CombatHistoryResponse[]> => {
     return apiFetch(`/combat/${characterId}/history`);
   }

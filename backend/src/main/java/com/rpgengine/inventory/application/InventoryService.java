@@ -51,6 +51,19 @@ public class InventoryService {
     }
 
     @Transactional
+    public boolean hasItems(UUID characterId, UUID itemId, int quantity) {
+        Inventory inventory = getInventoryByCharacterId(characterId);
+        return inventory.hasItem(itemId, quantity);
+    }
+
+    @Transactional
+    public void consumeItems(UUID characterId, UUID itemId, int quantity) {
+        Inventory inventory = getInventoryByCharacterId(characterId);
+        inventory.consumeItem(itemId, quantity);
+        inventoryRepository.save(inventory);
+    }
+
+    @Transactional
     public void removeItemSlot(UUID characterId, UUID slotId) {
         Inventory inventory = getInventoryByCharacterId(characterId);
         inventory.removeItemSlot(slotId);

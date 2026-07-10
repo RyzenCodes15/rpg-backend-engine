@@ -14,10 +14,12 @@ export default function CharacterLayout({
   const pathname = usePathname();
   const characterId = params.characterId;
 
-  const tabs = [
+    const tabs = [
     { name: 'Dashboard', path: `/dashboard/${characterId}` },
     { name: 'Inventory', path: `/dashboard/${characterId}/inventory` },
     { name: 'Equipment', path: `/dashboard/${characterId}/equipment` },
+    { name: 'Skills', path: `/dashboard/${characterId}/skills` },
+    { name: 'Crafting', path: `/dashboard/${characterId}/crafting` },
     { name: 'Monsters', path: `/dashboard/${characterId}/monsters` },
     { name: 'History', path: `/dashboard/${characterId}/history` }
   ];
