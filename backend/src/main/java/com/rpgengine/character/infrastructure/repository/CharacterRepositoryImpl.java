@@ -62,6 +62,7 @@ public class CharacterRepositoryImpl implements CharacterRepository {
             entity.setDefense(character.getBaseStats().defense());
             entity.setSpeed(character.getBaseStats().speed());
             entity.setCriticalChance(character.getBaseStats().criticalChance());
+            entity.setDodgeChance(character.getBaseStats().dodgeChance());
         }
         entity.setCreatedAt(character.getCreatedAt());
         entity.setUpdatedAt(character.getUpdatedAt());
@@ -75,7 +76,8 @@ public class CharacterRepositoryImpl implements CharacterRepository {
                 entity.getAttack(),
                 entity.getDefense(),
                 entity.getSpeed(),
-                entity.getCriticalChance()
+                entity.getCriticalChance(),
+                entity.getDodgeChance()
         );
         return new Character(
                 entity.getId(),

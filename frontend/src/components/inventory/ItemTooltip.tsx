@@ -51,6 +51,7 @@ export const ItemTooltip: React.FC<ItemTooltipProps> = ({ item, children }) => {
           {item.stats.bonusMana > 0 && <div><span className="text-rpg-text">MP:</span> <span className="text-blue-300 font-bold">+{item.stats.bonusMana}</span></div>}
           {item.stats.bonusSpeed > 0 && <div><span className="text-rpg-text">SPD:</span> <span className="text-yellow-400 font-bold">+{item.stats.bonusSpeed}</span></div>}
           {item.stats.bonusCriticalChance > 0 && <div><span className="text-rpg-text">CRIT:</span> <span className="text-purple-400 font-bold">+{item.stats.bonusCriticalChance}%</span></div>}
+          {item.stats.bonusDodgeChance > 0 && <div><span className="text-rpg-text">DODGE:</span> <span className="text-teal-400 font-bold">+{item.stats.bonusDodgeChance}%</span></div>}
         </div>
         
         {/* Value */}

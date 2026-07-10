@@ -8,6 +8,7 @@ public record RecipeResponse(
         String name,
         String description,
         UUID craftedItemId,
+        String craftedItemName,
         int requiredLevel,
         List<RecipeIngredientResponse> ingredients
 ) {}

@@ -5,6 +5,8 @@ import { craftingApi, RecipeResponse } from '@/lib/api/crafting';
 import { getInventory, Inventory } from '@/lib/api/inventory';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import Image from 'next/image';
+import { getItemIconPath } from '@/lib/itemUtils';
 
 export default function CraftingPage({ params }: { params: { characterId: string } }) {
   const [recipes, setRecipes] = useState<RecipeResponse[]>([]);
@@ -73,11 +75,16 @@ export default function CraftingPage({ params }: { params: { characterId: string
           return (
             <Card key={recipe.id} className="p-4 flex flex-col gap-3">
               <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-lg text-rpg-primary font-bold drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">
-                    {recipe.name}
-                  </h2>
-                  <p className="text-sm text-gray-400">Lv {recipe.requiredLevel} Required</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 relative bg-rpg-surface border-2 border-rpg-border pixel-border shrink-0">
+                    <Image src={getItemIconPath(recipe.craftedItemName)} alt={recipe.craftedItemName} fill className="object-contain pixelated p-1" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg text-rpg-primary font-bold drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+                      {recipe.name} ({recipe.craftedItemName})
+                    </h2>
+                    <p className="text-sm text-gray-400">Lv {recipe.requiredLevel} Required</p>
+                  </div>
                 </div>
                 <Button 
                   onClick={() => handleCraft(recipe.id)}
@@ -102,8 +109,13 @@ export default function CraftingPage({ params }: { params: { characterId: string
                     const hasEnough = totalInInv >= ing.quantity;
 
                     return (
-                      <li key={idx} className="flex justify-between border-b border-gray-700 py-1">
-                        <span className="text-gray-300">Material ID: {ing.materialItemId.substring(0, 8)}...</span>
+                      <li key={idx} className="flex justify-between items-center border-b border-gray-700 py-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 relative bg-rpg-surface border border-rpg-border pixel-border shrink-0">
+                            <Image src={getItemIconPath(ing.materialItemName)} alt={ing.materialItemName} fill className="object-contain pixelated p-0.5" />
+                          </div>
+                          <span className="text-gray-300">{ing.materialItemName}</span>
+                        </div>
                         <span className={hasEnough ? 'text-green-400' : 'text-red-400'}>
                           {totalInInv} / {ing.quantity}
                         </span>

@@ -5,5 +5,10 @@ public enum EquipmentSlot {
     HELMET,
     CHEST_ARMOR,
     GLOVES,
-    BOOTS
+    BOOTS,
+    SHIELD,
+    RING,
+    AMULET,
+    CAPE,
+    LEG_ARMOR
 }

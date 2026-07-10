@@ -61,12 +61,19 @@ public class CombatEngine {
 
         // Monster Turn
         if (monsterHealth > 0 && damageDealtToMonster >= 0 /* ensures they didn't just fail to act */) {
-            int damage = calculateDamage(monster.getAttack(), totalStats.defense());
-            charHealth -= damage;
-            damageTakenByChar += damage;
+            boolean charDodged = random.nextDouble() * 100 < totalStats.dodgeChance().doubleValue();
             
-            String msg = monster.getName() + " attacks " + character.getName() + " for " + damage + " damage!";
-            log.addEvent(new CombatEvent(monster.getName(), "Attack", damage, msg));
+            if (charDodged) {
+                String msg = character.getName() + " dodged " + monster.getName() + "'s attack!";
+                log.addEvent(new CombatEvent(monster.getName(), "Dodge", 0, msg));
+            } else {
+                int damage = calculateDamage(monster.getAttack(), totalStats.defense());
+                charHealth -= damage;
+                damageTakenByChar += damage;
+                
+                String msg = monster.getName() + " attacks " + character.getName() + " for " + damage + " damage!";
+                log.addEvent(new CombatEvent(monster.getName(), "Attack", damage, msg));
+            }
         }
 
         // Clean up session

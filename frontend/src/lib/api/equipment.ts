@@ -9,9 +9,14 @@ export interface Equipment {
   chestArmor: Item | null;
   gloves: Item | null;
   boots: Item | null;
+  shield: Item | null;
+  ring: Item | null;
+  amulet: Item | null;
+  cape: Item | null;
+  legArmor: Item | null;
 }
 
-export type EquipmentSlot = 'WEAPON' | 'HELMET' | 'CHEST_ARMOR' | 'GLOVES' | 'BOOTS';
+export type EquipmentSlot = 'WEAPON' | 'HELMET' | 'CHEST_ARMOR' | 'GLOVES' | 'BOOTS' | 'SHIELD' | 'RING' | 'AMULET' | 'CAPE' | 'LEG_ARMOR';
 
 export const getEquipment = async (characterId: string): Promise<Equipment> => {
   return apiFetch(`/characters/${characterId}/equipment`);

@@ -56,6 +56,9 @@ public class ItemJpaEntity {
     @Column(name = "bonus_critical_chance", nullable = false, precision = 5, scale = 2)
     private BigDecimal bonusCriticalChance;
 
+    @Column(name = "bonus_dodge_chance", nullable = false, precision = 5, scale = 2)
+    private BigDecimal bonusDodgeChance;
+
     // Getters and Setters
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
@@ -83,4 +86,6 @@ public class ItemJpaEntity {
     public void setBonusSpeed(int bonusSpeed) { this.bonusSpeed = bonusSpeed; }
     public BigDecimal getBonusCriticalChance() { return bonusCriticalChance; }
     public void setBonusCriticalChance(BigDecimal bonusCriticalChance) { this.bonusCriticalChance = bonusCriticalChance; }
+    public BigDecimal getBonusDodgeChance() { return bonusDodgeChance; }
+    public void setBonusDodgeChance(BigDecimal bonusDodgeChance) { this.bonusDodgeChance = bonusDodgeChance; }
 }

@@ -54,6 +54,21 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
         if (equipment.getBoots() != null) {
             itemJpaRepository.findById(equipment.getBoots().getId()).ifPresent(entity::setBoots);
         }
+        if (equipment.getShield() != null) {
+            itemJpaRepository.findById(equipment.getShield().getId()).ifPresent(entity::setShield);
+        }
+        if (equipment.getRing() != null) {
+            itemJpaRepository.findById(equipment.getRing().getId()).ifPresent(entity::setRing);
+        }
+        if (equipment.getAmulet() != null) {
+            itemJpaRepository.findById(equipment.getAmulet().getId()).ifPresent(entity::setAmulet);
+        }
+        if (equipment.getCape() != null) {
+            itemJpaRepository.findById(equipment.getCape().getId()).ifPresent(entity::setCape);
+        }
+        if (equipment.getLegArmor() != null) {
+            itemJpaRepository.findById(equipment.getLegArmor().getId()).ifPresent(entity::setLegArmor);
+        }
 
         return entity;
     }
@@ -66,7 +81,12 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
                 toItemDomain(entity.getHelmet()),
                 toItemDomain(entity.getChestArmor()),
                 toItemDomain(entity.getGloves()),
-                toItemDomain(entity.getBoots())
+                toItemDomain(entity.getBoots()),
+                toItemDomain(entity.getShield()),
+                toItemDomain(entity.getRing()),
+                toItemDomain(entity.getAmulet()),
+                toItemDomain(entity.getCape()),
+                toItemDomain(entity.getLegArmor())
         );
     }
 
@@ -79,7 +99,8 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
                 entity.getBonusAttack(),
                 entity.getBonusDefense(),
                 entity.getBonusSpeed(),
-                entity.getBonusCriticalChance()
+                entity.getBonusCriticalChance(),
+                entity.getBonusDodgeChance()
         );
         return new Item(
                 entity.getId(),

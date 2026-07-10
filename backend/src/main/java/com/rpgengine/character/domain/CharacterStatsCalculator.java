@@ -14,6 +14,11 @@ public class CharacterStatsCalculator {
         current = addStats(current, equipment.getChestArmor());
         current = addStats(current, equipment.getGloves());
         current = addStats(current, equipment.getBoots());
+        current = addStats(current, equipment.getShield());
+        current = addStats(current, equipment.getRing());
+        current = addStats(current, equipment.getAmulet());
+        current = addStats(current, equipment.getCape());
+        current = addStats(current, equipment.getLegArmor());
         return current;
     }
 
@@ -25,7 +30,8 @@ public class CharacterStatsCalculator {
                 stats.attack() + item.getStats().bonusAttack(),
                 stats.defense() + item.getStats().bonusDefense(),
                 stats.speed() + item.getStats().bonusSpeed(),
-                stats.criticalChance().add(item.getStats().bonusCriticalChance())
+                stats.criticalChance().add(item.getStats().bonusCriticalChance()),
+                stats.dodgeChance().add(item.getStats().bonusDodgeChance())
         );
     }
 }

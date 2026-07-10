@@ -15,6 +15,8 @@ import com.rpgengine.common.exception.ResourceNotFoundException;
 import com.rpgengine.inventory.application.EquipmentService;
 import com.rpgengine.inventory.application.InventoryService;
 import com.rpgengine.inventory.domain.Equipment;
+import com.rpgengine.inventory.domain.Item;
+import com.rpgengine.inventory.domain.repository.ItemRepository;
 import com.rpgengine.skill.domain.Skill;
 import com.rpgengine.skill.domain.repository.SkillRepository;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CombatService {
@@ -36,11 +39,12 @@ public class CombatService {
     private final CombatHistoryRepository combatHistoryRepository;
     private final CombatSessionRepository combatSessionRepository;
     private final SkillRepository skillRepository;
+    private final ItemRepository itemRepository;
     
     private final CombatEngine combatEngine = new CombatEngine();
     private final LootGenerator lootGenerator = new LootGenerator();
 
-    public CombatService(CharacterService characterService, EquipmentService equipmentService, InventoryService inventoryService, MonsterService monsterService, CombatHistoryRepository combatHistoryRepository, CombatSessionRepository combatSessionRepository, SkillRepository skillRepository) {
+    public CombatService(CharacterService characterService, EquipmentService equipmentService, InventoryService inventoryService, MonsterService monsterService, CombatHistoryRepository combatHistoryRepository, CombatSessionRepository combatSessionRepository, SkillRepository skillRepository, ItemRepository itemRepository) {
         this.characterService = characterService;
         this.equipmentService = equipmentService;
         this.inventoryService = inventoryService;
@@ -48,6 +52,7 @@ public class CombatService {
         this.combatHistoryRepository = combatHistoryRepository;
         this.combatSessionRepository = combatSessionRepository;
         this.skillRepository = skillRepository;
+        this.itemRepository = itemRepository;
     }
 
     @Transactional
@@ -141,6 +146,10 @@ public class CombatService {
             characterService.updateCharacter(character);
         }
 
+        List<String> droppedItemNames = droppedItems.stream()
+                .map(id -> itemRepository.findById(id).map(Item::getName).orElse("Unknown Item"))
+                .collect(Collectors.toList());
+
         return new CombatResponse(
                 result.isVictory(),
                 result.damageDealt(),
@@ -148,7 +157,7 @@ public class CombatService {
                 result.goldEarned(),
                 result.expEarned(),
                 result.log().getEvents(),
-                droppedItems
+                droppedItemNames
         );
     }
 

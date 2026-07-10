@@ -52,7 +52,7 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
         ) : (
           <div className="relative w-full h-full opacity-30">
             <Image 
-              src={`/assets/items/placeholders/${slotType.toLowerCase() === 'chest_armor' ? 'chest_armor' : slotType.toLowerCase()}.png`}
+              src={`/assets/items/placeholders/${slotType.toLowerCase() === 'chest_armor' ? 'chest_armor' : slotType.toLowerCase()}.${['SHIELD', 'RING', 'AMULET', 'CAPE', 'LEG_ARMOR'].includes(slotType) ? 'svg' : 'png'}`}
               alt={`Empty ${label} slot`}
               fill
               className="object-contain pixelated p-3 grayscale"
@@ -74,18 +74,31 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
       
       {/* Paper doll layout */}
       <div className="flex flex-col items-center justify-center flex-1 gap-8 relative z-10">
-        {/* Head */}
-        {renderSlot('Helmet', 'HELMET', equipment.helmet)}
+        {/* Head & Neck */}
+        <div className="flex gap-16 w-full justify-center items-end">
+          {renderSlot('Cape', 'CAPE', equipment.cape)}
+          {renderSlot('Helmet', 'HELMET', equipment.helmet)}
+          {renderSlot('Amulet', 'AMULET', equipment.amulet)}
+        </div>
         
         {/* Upper Body */}
         <div className="flex gap-16 w-full justify-center items-center">
           {renderSlot('Weapon', 'WEAPON', equipment.weapon)}
           {renderSlot('Chest', 'CHEST_ARMOR', equipment.chestArmor)}
-          {renderSlot('Gloves', 'GLOVES', equipment.gloves)}
+          {renderSlot('Shield', 'SHIELD', equipment.shield)}
         </div>
         
+        {/* Hands */}
+        <div className="flex gap-24 w-full justify-center items-center">
+          {renderSlot('Gloves', 'GLOVES', equipment.gloves)}
+          {renderSlot('Ring', 'RING', equipment.ring)}
+        </div>
+
         {/* Lower Body */}
-        {renderSlot('Boots', 'BOOTS', equipment.boots)}
+        <div className="flex gap-16 w-full justify-center items-start">
+          {renderSlot('Legs', 'LEG_ARMOR', equipment.legArmor)}
+          {renderSlot('Boots', 'BOOTS', equipment.boots)}
+        </div>
       </div>
     </div>
   );

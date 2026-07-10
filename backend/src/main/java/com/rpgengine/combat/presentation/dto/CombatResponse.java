@@ -11,5 +11,5 @@ public record CombatResponse(
         long goldEarned,
         long experienceEarned,
         List<CombatEvent> log,
-        List<UUID> itemsDropped
+        List<String> itemsDropped
 ) {}

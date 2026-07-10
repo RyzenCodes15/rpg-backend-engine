@@ -8,5 +8,14 @@ public enum ItemCategory {
     BOOTS,
     CONSUMABLE,
     MATERIAL,
-    QUEST_ITEM
+    QUEST_ITEM,
+    SHIELD,
+    RING,
+    AMULET,
+    CAPE,
+    LEG_ARMOR,
+    KEY,
+    SCROLL,
+    MAGIC_ITEM,
+    TREASURE
 }

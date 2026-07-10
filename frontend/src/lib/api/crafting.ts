@@ -2,6 +2,7 @@ import { apiFetch } from '../api';
 
 export interface RecipeIngredientResponse {
   materialItemId: string;
+  materialItemName: string;
   quantity: number;
 }
 
@@ -10,6 +11,7 @@ export interface RecipeResponse {
   name: string;
   description: string;
   craftedItemId: string;
+  craftedItemName: string;
   requiredLevel: number;
   ingredients: RecipeIngredientResponse[];
 }

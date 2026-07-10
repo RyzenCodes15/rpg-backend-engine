@@ -38,9 +38,19 @@ export const apiFetch = async (endpoint: string, options: ApiOptions = {}) => {
     return null;
   }
 
-  if (options.textResponse) {
-    return response.text();
+  const text = await response.text();
+  if (!text) {
+    return null;
   }
 
-  return response.json();
+  if (options.textResponse) {
+    return text;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    console.error('Failed to parse JSON response:', text);
+    throw new Error('Invalid JSON response from server');
+  }
 };

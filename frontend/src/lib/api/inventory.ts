@@ -7,6 +7,7 @@ export interface ItemStats {
   bonusDefense: number;
   bonusSpeed: number;
   bonusCriticalChance: number;
+  bonusDodgeChance: number;
 }
 
 export interface Item {
@@ -14,7 +15,7 @@ export interface Item {
   name: string;
   description: string;
   rarity: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
-  category: 'WEAPON' | 'HELMET' | 'CHEST_ARMOR' | 'GLOVES' | 'BOOTS' | 'CONSUMABLE' | 'MATERIAL' | 'QUEST_ITEM';
+  category: 'WEAPON' | 'HELMET' | 'CHEST_ARMOR' | 'GLOVES' | 'BOOTS' | 'SHIELD' | 'RING' | 'AMULET' | 'CAPE' | 'LEG_ARMOR' | 'CONSUMABLE' | 'MATERIAL' | 'QUEST_ITEM';
   value: number;
   requiredLevel: number;
   stats: ItemStats;

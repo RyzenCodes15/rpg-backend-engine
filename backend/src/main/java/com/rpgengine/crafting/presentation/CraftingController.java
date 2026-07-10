@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import com.rpgengine.inventory.domain.repository.ItemRepository;
+import com.rpgengine.inventory.domain.Item;
 
 @RestController
 @RequestMapping("/api/v1/crafting")
@@ -18,25 +20,37 @@ import java.util.stream.Collectors;
 public class CraftingController {
 
     private final CraftingService craftingService;
+    private final ItemRepository itemRepository;
 
-    public CraftingController(CraftingService craftingService) {
+    public CraftingController(CraftingService craftingService, ItemRepository itemRepository) {
         this.craftingService = craftingService;
+        this.itemRepository = itemRepository;
     }
 
     @GetMapping("/recipes")
     @Operation(summary = "Get All Recipes", description = "Retrieves a list of all available recipes.")
     public ResponseEntity<List<RecipeResponse>> getAllRecipes() {
         List<RecipeResponse> responses = craftingService.getAllRecipes().stream()
-                .map(r -> new RecipeResponse(
-                        r.getId(),
-                        r.getName(),
-                        r.getDescription(),
-                        r.getCraftedItemId(),
-                        r.getRequiredLevel(),
-                        r.getIngredients().stream()
-                                .map(i -> new RecipeIngredientResponse(i.getMaterialItemId(), i.getQuantity()))
-                                .collect(Collectors.toList())
-                ))
+                .map(r -> {
+                    String craftedItemName = itemRepository.findById(r.getCraftedItemId())
+                            .map(Item::getName).orElse("Unknown Item");
+                    
+                    return new RecipeResponse(
+                            r.getId(),
+                            r.getName(),
+                            r.getDescription(),
+                            r.getCraftedItemId(),
+                            craftedItemName,
+                            r.getRequiredLevel(),
+                            r.getIngredients().stream()
+                                    .map(i -> {
+                                        String matName = itemRepository.findById(i.getMaterialItemId())
+                                                .map(Item::getName).orElse("Unknown Material");
+                                        return new RecipeIngredientResponse(i.getMaterialItemId(), matName, i.getQuantity());
+                                    })
+                                    .collect(Collectors.toList())
+                    );
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }

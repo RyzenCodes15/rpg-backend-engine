@@ -30,7 +30,8 @@ public class ItemRepositoryImpl implements ItemRepository {
                 entity.getBonusAttack(),
                 entity.getBonusDefense(),
                 entity.getBonusSpeed(),
-                entity.getBonusCriticalChance()
+                entity.getBonusCriticalChance(),
+                entity.getBonusDodgeChance()
         );
         return new Item(
                 entity.getId(),

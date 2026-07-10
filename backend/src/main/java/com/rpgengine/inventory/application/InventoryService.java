@@ -8,6 +8,7 @@ import com.rpgengine.inventory.domain.repository.EquipmentRepository;
 import com.rpgengine.inventory.domain.repository.InventoryRepository;
 import com.rpgengine.inventory.domain.repository.ItemRepository;
 import com.rpgengine.character.domain.CharacterStatsCalculator;
+import com.rpgengine.character.domain.CharacterStats;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,12 +87,20 @@ public class InventoryService {
         com.rpgengine.character.domain.Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new ResourceNotFoundException("Character not found"));
 
-        // Heal character
+        // Heal character and restore mana
         Equipment equipment = equipmentRepository.findByCharacterId(characterId).orElse(null);
-        int maxHealth = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment).health();
+        CharacterStats totalStats = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment);
+        
+        int maxHealth = totalStats.health();
         int healingAmount = item.getStats().bonusHealth();
         int newHealth = Math.min(maxHealth, character.getCurrentHealth() + healingAmount);
         character.setCurrentHealth(newHealth);
+
+        int maxMana = totalStats.mana();
+        int manaRestore = item.getStats().bonusMana();
+        int newMana = Math.min(maxMana, character.getCurrentMana() + manaRestore);
+        character.setCurrentMana(newMana);
+        
         characterRepository.save(character);
 
         // Consume item

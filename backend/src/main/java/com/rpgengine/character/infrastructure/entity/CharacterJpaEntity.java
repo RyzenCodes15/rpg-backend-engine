@@ -63,6 +63,9 @@ public class CharacterJpaEntity {
     @Column(name = "critical_chance", nullable = false, precision = 5, scale = 2)
     private BigDecimal criticalChance;
     
+    @Column(name = "dodge_chance", nullable = false, precision = 5, scale = 2)
+    private BigDecimal dodgeChance;
+    
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -102,6 +105,8 @@ public class CharacterJpaEntity {
     public void setSpeed(int speed) { this.speed = speed; }
     public BigDecimal getCriticalChance() { return criticalChance; }
     public void setCriticalChance(BigDecimal criticalChance) { this.criticalChance = criticalChance; }
+    public BigDecimal getDodgeChance() { return dodgeChance; }
+    public void setDodgeChance(BigDecimal dodgeChance) { this.dodgeChance = dodgeChance; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }

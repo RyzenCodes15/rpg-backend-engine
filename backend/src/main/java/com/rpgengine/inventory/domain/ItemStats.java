@@ -8,6 +8,7 @@ public record ItemStats(
         int bonusAttack,
         int bonusDefense,
         int bonusSpeed,
-        BigDecimal bonusCriticalChance
+        BigDecimal bonusCriticalChance,
+        BigDecimal bonusDodgeChance
 ) {
 }

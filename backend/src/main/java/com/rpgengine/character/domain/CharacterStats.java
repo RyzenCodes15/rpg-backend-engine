@@ -9,7 +9,8 @@ public record CharacterStats(
         int attack,
         int defense,
         int speed,
-        BigDecimal criticalChance
+        BigDecimal criticalChance,
+        BigDecimal dodgeChance
 ) {
     public CharacterStats add(CharacterStats other) {
         return new CharacterStats(
@@ -18,7 +19,8 @@ public record CharacterStats(
                 this.attack + other.attack(),
                 this.defense + other.defense(),
                 this.speed + other.speed(),
-                this.criticalChance.add(other.criticalChance())
+                this.criticalChance.add(other.criticalChance()),
+                this.dodgeChance.add(other.dodgeChance())
         );
     }
 }
