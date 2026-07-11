@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Character } from '@/lib/api/character';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 interface CharacterCardProps {
   character: Character;
@@ -10,7 +11,11 @@ interface CharacterCardProps {
 export const CharacterCard: React.FC<CharacterCardProps> = ({ character }) => {
   return (
     <Link href={`/dashboard/${character.id}`}>
-      <div className="bg-rpg-surface border-4 border-rpg-border hover:border-rpg-primary transition-all p-5 cursor-pointer group pixel-border h-full flex flex-col">
+      <motion.div 
+        whileHover={{ scale: 1.02, y: -5 }}
+        transition={{ type: 'spring', stiffness: 300 }}
+        className="bg-rpg-surface border-4 border-rpg-border hover:border-rpg-primary transition-colors p-5 cursor-pointer group pixel-border h-full flex flex-col shadow-lg hover:shadow-2xl"
+      >
         <div className="flex justify-between items-start mb-4 border-b-4 border-rpg-border pb-3">
           <div className="flex gap-4">
             <div className="relative w-16 h-16 border-2 border-rpg-border pixel-border shrink-0">
@@ -49,7 +54,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({ character }) => {
             <span className="font-retro text-xl text-green-400">{character.experience}</span>
           </div>
         </div>
-      </div>
+      </motion.div>
     </Link>
   );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Item } from '@/lib/api/inventory';
-import Image from 'next/image';
-import { getItemIconPath } from '@/lib/itemUtils';
+import { ItemIcon } from '../ui/ItemIcon';
 
 interface ItemTooltipProps {
   item: Item;
@@ -28,7 +27,7 @@ export const ItemTooltip: React.FC<ItemTooltipProps> = ({ item, children }) => {
         {/* Title & Rarity */}
         <div className="flex items-center gap-3 mb-2">
           <div className="w-10 h-10 relative bg-rpg-surface border-2 border-rpg-border pixel-border shrink-0">
-            <Image src={getItemIconPath(item)} alt={item.name} fill className="object-contain pixelated p-1" />
+            <ItemIcon item={item} className="p-1 w-full h-full" />
           </div>
           <h4 className={`font-pixel text-sm drop-shadow-[1px_1px_0px_rgba(0,0,0,1)] ${getRarityColor(item.rarity)}`}>{item.name}</h4>
         </div>

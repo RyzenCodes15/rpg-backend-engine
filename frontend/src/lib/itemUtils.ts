@@ -60,3 +60,32 @@ export const getItemIconPath = (itemOrName: Item | string | null): string => {
   }
   return '/assets/items/placeholders/weapon.png';
 };
+
+export const getItemCategoryFallback = (itemOrName: Item | string | null): string => {
+  if (!itemOrName) return 'misc';
+  
+  const isString = typeof itemOrName === 'string';
+  const name = isString ? itemOrName : itemOrName.name;
+  const nameKey = name.toLowerCase().replace(/ /g, '_');
+  
+  if (!isString) {
+    switch (itemOrName.category) {
+      case 'WEAPON': return 'weapon';
+      case 'HELMET':
+      case 'CHEST_ARMOR':
+      case 'GLOVES':
+      case 'BOOTS': return 'armor';
+      case 'CONSUMABLE': return 'consumable';
+      case 'MATERIAL': return 'material';
+      case 'QUEST_ITEM': return 'quest';
+    }
+  } else {
+    if (nameKey.includes('sword') || nameKey.includes('axe') || nameKey.includes('bow') || nameKey.includes('staff')) return 'weapon';
+    if (nameKey.includes('armor') || nameKey.includes('tunic') || nameKey.includes('helmet') || nameKey.includes('shield')) return 'armor';
+    if (nameKey.includes('potion') || nameKey.includes('flask') || nameKey.includes('elixir')) return 'consumable';
+    if (nameKey.includes('scroll') || nameKey.includes('tome')) return 'scroll';
+    if (['goblin_ear', 'bone_fragment', 'slime_jelly', 'wolf_pelt'].includes(nameKey) || nameKey.includes('ore') || nameKey.includes('ingot')) return 'material';
+  }
+  
+  return 'misc';
+};

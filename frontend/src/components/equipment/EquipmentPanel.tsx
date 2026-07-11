@@ -2,8 +2,7 @@ import React from 'react';
 import { Equipment, EquipmentSlot } from '@/lib/api/equipment';
 import { Item } from '@/lib/api/inventory';
 import { ItemTooltip } from '../inventory/ItemTooltip';
-import Image from 'next/image';
-import { getItemIconPath } from '@/lib/itemUtils';
+import { ItemIcon } from '../ui/ItemIcon';
 
 interface EquipmentPanelProps {
   equipment: Equipment | null;
@@ -40,23 +39,13 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
           <ItemTooltip item={item}>
             <div className="w-full h-full flex items-center justify-center p-2">
               <div className="relative w-full h-full">
-                <Image 
-                  src={getItemIconPath(item)}
-                  alt={item.name}
-                  fill
-                  className="object-contain pixelated drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]"
-                />
+                <ItemIcon item={item} className="w-full h-full drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]" />
               </div>
             </div>
           </ItemTooltip>
         ) : (
           <div className="relative w-full h-full opacity-30">
-            <Image 
-              src={`/assets/items/placeholders/${slotType.toLowerCase() === 'chest_armor' ? 'chest_armor' : slotType.toLowerCase()}.${['SHIELD', 'RING', 'AMULET', 'CAPE', 'LEG_ARMOR'].includes(slotType) ? 'svg' : 'png'}`}
-              alt={`Empty ${label} slot`}
-              fill
-              className="object-contain pixelated p-3 grayscale"
-            />
+            <ItemIcon item={{ name: slotType, category: slotType } as any} className="w-full h-full p-3 opacity-30 grayscale" />
           </div>
         )}
       </div>
