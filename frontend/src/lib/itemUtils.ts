@@ -1,64 +1,7 @@
 import { Item } from './api/inventory';
 
 export const getItemIconPath = (itemOrName: Item | string | null): string => {
-  if (!itemOrName) return '/assets/items/placeholders/weapon.png'; // default fallback
-
-  const isString = typeof itemOrName === 'string';
-  const name = isString ? itemOrName : itemOrName.name;
-  const nameKey = name.toLowerCase().replace(/ /g, '_');
-  
-  // Try to determine category from object, otherwise infer from name for strings
-  let categoryFolder = 'misc';
-  if (!isString) {
-    switch (itemOrName.category) {
-      case 'WEAPON': categoryFolder = 'weapons'; break;
-      case 'HELMET':
-      case 'CHEST_ARMOR':
-      case 'GLOVES':
-      case 'BOOTS': categoryFolder = 'armor'; break;
-      case 'CONSUMABLE': categoryFolder = 'consumables'; break;
-      case 'MATERIAL': categoryFolder = 'materials'; break;
-      case 'QUEST_ITEM': categoryFolder = 'quest'; break;
-    }
-  } else {
-    // Infer category for known items
-    if (nameKey === 'wooden_sword') categoryFolder = 'weapons';
-    else if (nameKey === 'leather_tunic') categoryFolder = 'armor';
-    else if (nameKey === 'minor_health_potion') categoryFolder = 'consumables';
-    else if (['goblin_ear', 'bone_fragment', 'slime_jelly', 'wolf_pelt'].includes(nameKey)) categoryFolder = 'materials';
-  }
-
-  // Use the specific generated/SVG asset based on item name key
-  const availableAssets = [
-    'wooden_sword',
-    'leather_tunic',
-    'minor_health_potion',
-  ];
-  const availableSvgs = [
-    'goblin_ear',
-    'bone_fragment',
-    'slime_jelly',
-    'wolf_pelt'
-  ];
-
-  if (availableAssets.includes(nameKey)) {
-    return `/assets/items/${categoryFolder}/${nameKey}.png`;
-  } else if (availableSvgs.includes(nameKey)) {
-    return `/assets/items/${categoryFolder}/${nameKey}.svg`;
-  }
-
-  // Fallback to placeholder by category if specific icon is missing
-  if (!isString) {
-    switch (itemOrName.category) {
-      case 'WEAPON': return '/assets/items/placeholders/weapon.png';
-      case 'HELMET': return '/assets/items/placeholders/helmet.png';
-      case 'CHEST_ARMOR': return '/assets/items/placeholders/chest_armor.png';
-      case 'GLOVES': return '/assets/items/placeholders/gloves.png';
-      case 'BOOTS': return '/assets/items/placeholders/boots.png';
-      case 'CONSUMABLE': return '/assets/items/placeholders/consumable.png';
-    }
-  }
-  return '/assets/items/placeholders/weapon.png';
+  return ''; // Deprecated: we use Lucide icons exclusively now
 };
 
 export const getItemCategoryFallback = (itemOrName: Item | string | null): string => {
@@ -72,19 +15,17 @@ export const getItemCategoryFallback = (itemOrName: Item | string | null): strin
     switch (itemOrName.category) {
       case 'WEAPON': return 'weapon';
       case 'HELMET':
-      case 'CHEST_ARMOR':
-      case 'GLOVES':
+      case 'ARMOR':
       case 'BOOTS': return 'armor';
       case 'CONSUMABLE': return 'consumable';
       case 'MATERIAL': return 'material';
-      case 'QUEST_ITEM': return 'quest';
     }
   } else {
-    if (nameKey.includes('sword') || nameKey.includes('axe') || nameKey.includes('bow') || nameKey.includes('staff')) return 'weapon';
-    if (nameKey.includes('armor') || nameKey.includes('tunic') || nameKey.includes('helmet') || nameKey.includes('shield')) return 'armor';
+    if (nameKey.includes('sword') || nameKey.includes('axe') || nameKey.includes('bow') || nameKey.includes('staff') || nameKey.includes('blade')) return 'weapon';
+    if (nameKey.includes('armor') || nameKey.includes('tunic') || nameKey.includes('helmet') || nameKey.includes('shield') || nameKey.includes('boots')) return 'armor';
     if (nameKey.includes('potion') || nameKey.includes('flask') || nameKey.includes('elixir')) return 'consumable';
     if (nameKey.includes('scroll') || nameKey.includes('tome')) return 'scroll';
-    if (['goblin_ear', 'bone_fragment', 'slime_jelly', 'wolf_pelt'].includes(nameKey) || nameKey.includes('ore') || nameKey.includes('ingot')) return 'material';
+    if (['goblin_jelly', 'goblin_tooth', 'bone', 'slime_core', 'pelt'].some(kw => nameKey.includes(kw)) || nameKey.includes('ore') || nameKey.includes('ingot')) return 'material';
   }
   
   return 'misc';

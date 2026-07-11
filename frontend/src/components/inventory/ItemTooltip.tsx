@@ -11,10 +11,8 @@ export const ItemTooltip: React.FC<ItemTooltipProps> = ({ item, children }) => {
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
       case 'COMMON': return 'text-white';
-      case 'UNCOMMON': return 'text-green-400';
       case 'RARE': return 'text-blue-400';
-      case 'EPIC': return 'text-purple-400';
-      case 'LEGENDARY': return 'text-yellow-400';
+      case 'LEGENDARY': return 'text-orange-400';
       default: return 'text-white';
     }
   };

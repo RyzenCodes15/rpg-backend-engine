@@ -45,29 +45,11 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
         if (equipment.getHelmet() != null) {
             itemJpaRepository.findById(equipment.getHelmet().getId()).ifPresent(entity::setHelmet);
         }
-        if (equipment.getChestArmor() != null) {
-            itemJpaRepository.findById(equipment.getChestArmor().getId()).ifPresent(entity::setChestArmor);
-        }
-        if (equipment.getGloves() != null) {
-            itemJpaRepository.findById(equipment.getGloves().getId()).ifPresent(entity::setGloves);
+        if (equipment.getArmor() != null) {
+            itemJpaRepository.findById(equipment.getArmor().getId()).ifPresent(entity::setArmor);
         }
         if (equipment.getBoots() != null) {
             itemJpaRepository.findById(equipment.getBoots().getId()).ifPresent(entity::setBoots);
-        }
-        if (equipment.getShield() != null) {
-            itemJpaRepository.findById(equipment.getShield().getId()).ifPresent(entity::setShield);
-        }
-        if (equipment.getRing() != null) {
-            itemJpaRepository.findById(equipment.getRing().getId()).ifPresent(entity::setRing);
-        }
-        if (equipment.getAmulet() != null) {
-            itemJpaRepository.findById(equipment.getAmulet().getId()).ifPresent(entity::setAmulet);
-        }
-        if (equipment.getCape() != null) {
-            itemJpaRepository.findById(equipment.getCape().getId()).ifPresent(entity::setCape);
-        }
-        if (equipment.getLegArmor() != null) {
-            itemJpaRepository.findById(equipment.getLegArmor().getId()).ifPresent(entity::setLegArmor);
         }
 
         return entity;
@@ -79,14 +61,8 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
                 entity.getCharacterId(),
                 toItemDomain(entity.getWeapon()),
                 toItemDomain(entity.getHelmet()),
-                toItemDomain(entity.getChestArmor()),
-                toItemDomain(entity.getGloves()),
-                toItemDomain(entity.getBoots()),
-                toItemDomain(entity.getShield()),
-                toItemDomain(entity.getRing()),
-                toItemDomain(entity.getAmulet()),
-                toItemDomain(entity.getCape()),
-                toItemDomain(entity.getLegArmor())
+                toItemDomain(entity.getArmor()),
+                toItemDomain(entity.getBoots())
         );
     }
 

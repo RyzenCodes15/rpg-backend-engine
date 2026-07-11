@@ -11,14 +11,8 @@ public class CharacterStatsCalculator {
         CharacterStats current = baseStats;
         current = addStats(current, equipment.getWeapon());
         current = addStats(current, equipment.getHelmet());
-        current = addStats(current, equipment.getChestArmor());
-        current = addStats(current, equipment.getGloves());
+        current = addStats(current, equipment.getArmor());
         current = addStats(current, equipment.getBoots());
-        current = addStats(current, equipment.getShield());
-        current = addStats(current, equipment.getRing());
-        current = addStats(current, equipment.getAmulet());
-        current = addStats(current, equipment.getCape());
-        current = addStats(current, equipment.getLegArmor());
         return current;
     }
 

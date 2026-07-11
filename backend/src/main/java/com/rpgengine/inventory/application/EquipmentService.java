@@ -25,7 +25,7 @@ public class EquipmentService {
 
     @Transactional
     public void createEquipment(UUID characterId) {
-        Equipment equipment = new Equipment(UUID.randomUUID(), characterId, null, null, null, null, null, null, null, null, null, null);
+        Equipment equipment = new Equipment(UUID.randomUUID(), characterId, null, null, null, null);
         equipmentRepository.save(equipment);
     }
 
@@ -48,14 +48,8 @@ public class EquipmentService {
         switch (slot) {
             case WEAPON -> equipment.setWeapon(item);
             case HELMET -> equipment.setHelmet(item);
-            case CHEST_ARMOR -> equipment.setChestArmor(item);
-            case GLOVES -> equipment.setGloves(item);
+            case ARMOR -> equipment.setArmor(item);
             case BOOTS -> equipment.setBoots(item);
-            case SHIELD -> equipment.setShield(item);
-            case RING -> equipment.setRing(item);
-            case AMULET -> equipment.setAmulet(item);
-            case CAPE -> equipment.setCape(item);
-            case LEG_ARMOR -> equipment.setLegArmor(item);
         }
 
         equipmentRepository.save(equipment);
@@ -67,14 +61,8 @@ public class EquipmentService {
         switch (slot) {
             case WEAPON -> equipment.setWeapon(null);
             case HELMET -> equipment.setHelmet(null);
-            case CHEST_ARMOR -> equipment.setChestArmor(null);
-            case GLOVES -> equipment.setGloves(null);
+            case ARMOR -> equipment.setArmor(null);
             case BOOTS -> equipment.setBoots(null);
-            case SHIELD -> equipment.setShield(null);
-            case RING -> equipment.setRing(null);
-            case AMULET -> equipment.setAmulet(null);
-            case CAPE -> equipment.setCape(null);
-            case LEG_ARMOR -> equipment.setLegArmor(null);
         }
         equipmentRepository.save(equipment);
     }
@@ -83,14 +71,8 @@ public class EquipmentService {
         return switch (slot) {
             case WEAPON -> category == ItemCategory.WEAPON;
             case HELMET -> category == ItemCategory.HELMET;
-            case CHEST_ARMOR -> category == ItemCategory.CHEST_ARMOR;
-            case GLOVES -> category == ItemCategory.GLOVES;
+            case ARMOR -> category == ItemCategory.ARMOR;
             case BOOTS -> category == ItemCategory.BOOTS;
-            case SHIELD -> category == ItemCategory.SHIELD;
-            case RING -> category == ItemCategory.RING;
-            case AMULET -> category == ItemCategory.AMULET;
-            case CAPE -> category == ItemCategory.CAPE;
-            case LEG_ARMOR -> category == ItemCategory.LEG_ARMOR;
         };
     }
 }

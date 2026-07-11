@@ -14,8 +14,8 @@ export interface Item {
   id: string;
   name: string;
   description: string;
-  rarity: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
-  category: 'WEAPON' | 'HELMET' | 'CHEST_ARMOR' | 'GLOVES' | 'BOOTS' | 'SHIELD' | 'RING' | 'AMULET' | 'CAPE' | 'LEG_ARMOR' | 'CONSUMABLE' | 'MATERIAL' | 'QUEST_ITEM';
+  rarity: 'COMMON' | 'RARE' | 'LEGENDARY';
+  category: 'WEAPON' | 'HELMET' | 'ARMOR' | 'BOOTS' | 'CONSUMABLE' | 'MATERIAL';
   value: number;
   requiredLevel: number;
   stats: ItemStats;

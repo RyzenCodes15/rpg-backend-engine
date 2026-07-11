@@ -17,10 +17,8 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
   const getRarityBorder = (rarity: string) => {
     switch (rarity) {
       case 'COMMON': return 'border-white';
-      case 'UNCOMMON': return 'border-green-500';
       case 'RARE': return 'border-blue-500';
-      case 'EPIC': return 'border-purple-500';
-      case 'LEGENDARY': return 'border-yellow-400';
+      case 'LEGENDARY': return 'border-orange-500';
       default: return 'border-rpg-border';
     }
   };
@@ -30,7 +28,7 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
       <span className="font-pixel text-[10px] text-rpg-text drop-shadow-[1px_1px_0px_rgba(0,0,0,1)] mb-2">{label}</span>
       <div 
         className={`
-          w-16 h-16 md:w-20 md:h-20 bg-rpg-bg flex items-center justify-center relative transition-colors pixel-border border-4
+          w-20 h-20 md:w-24 md:h-24 bg-rpg-bg flex items-center justify-center relative transition-colors pixel-border border-4
           ${item ? 'cursor-pointer ' + getRarityBorder(item.rarity) : 'border-rpg-border border-dashed opacity-50'}
         `}
         onClick={() => item && onUnequip && onUnequip(slotType)}
@@ -39,13 +37,13 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
           <ItemTooltip item={item}>
             <div className="w-full h-full flex items-center justify-center p-2">
               <div className="relative w-full h-full">
-                <ItemIcon item={item} className="w-full h-full drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]" />
+                <ItemIcon item={item} size={64} className="w-full h-full drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] bg-transparent border-0" />
               </div>
             </div>
           </ItemTooltip>
         ) : (
           <div className="relative w-full h-full opacity-30">
-            <ItemIcon item={{ name: slotType, category: slotType } as any} className="w-full h-full p-3 opacity-30 grayscale" />
+            <ItemIcon item={{ name: slotType, category: slotType } as any} size={64} className="w-full h-full p-3 opacity-30 grayscale bg-transparent border-0" />
           </div>
         )}
       </div>
@@ -61,34 +59,22 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
         Equipped Gear
       </h3>
       
-      {/* Paper doll layout */}
+      {/* Simplified Paper doll layout */}
       <div className="flex flex-col items-center justify-center flex-1 gap-8 relative z-10">
-        {/* Head & Neck */}
         <div className="flex gap-16 w-full justify-center items-end">
-          {renderSlot('Cape', 'CAPE', equipment.cape)}
           {renderSlot('Helmet', 'HELMET', equipment.helmet)}
-          {renderSlot('Amulet', 'AMULET', equipment.amulet)}
         </div>
         
-        {/* Upper Body */}
         <div className="flex gap-16 w-full justify-center items-center">
           {renderSlot('Weapon', 'WEAPON', equipment.weapon)}
-          {renderSlot('Chest', 'CHEST_ARMOR', equipment.chestArmor)}
-          {renderSlot('Shield', 'SHIELD', equipment.shield)}
+          {renderSlot('Armor', 'ARMOR', equipment.armor)}
         </div>
         
-        {/* Hands */}
-        <div className="flex gap-24 w-full justify-center items-center">
-          {renderSlot('Gloves', 'GLOVES', equipment.gloves)}
-          {renderSlot('Ring', 'RING', equipment.ring)}
-        </div>
-
-        {/* Lower Body */}
         <div className="flex gap-16 w-full justify-center items-start">
-          {renderSlot('Legs', 'LEG_ARMOR', equipment.legArmor)}
           {renderSlot('Boots', 'BOOTS', equipment.boots)}
         </div>
       </div>
     </div>
   );
 };
+

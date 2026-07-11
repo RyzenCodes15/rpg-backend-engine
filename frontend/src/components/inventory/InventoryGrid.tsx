@@ -21,10 +21,8 @@ export const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, onItemC
   const getRarityBorder = (rarity: string) => {
     switch (rarity) {
       case 'COMMON': return 'border-white hover:border-slate-300';
-      case 'UNCOMMON': return 'border-green-500 hover:border-green-300';
       case 'RARE': return 'border-blue-500 hover:border-blue-300';
-      case 'EPIC': return 'border-purple-500 hover:border-purple-300';
-      case 'LEGENDARY': return 'border-yellow-400 hover:border-yellow-200';
+      case 'LEGENDARY': return 'border-orange-500 hover:border-orange-300';
       default: return 'border-rpg-border hover:border-rpg-text';
     }
   };

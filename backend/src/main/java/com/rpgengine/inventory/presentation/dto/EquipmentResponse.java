@@ -9,8 +9,7 @@ public record EquipmentResponse(
         UUID characterId,
         Item weapon,
         Item helmet,
-        Item chestArmor,
-        Item gloves,
+        Item armor,
         Item boots
 ) {
     public static EquipmentResponse fromDomain(Equipment equipment) {
@@ -19,8 +18,7 @@ public record EquipmentResponse(
                 equipment.getCharacterId(),
                 equipment.getWeapon(),
                 equipment.getHelmet(),
-                equipment.getChestArmor(),
-                equipment.getGloves(),
+                equipment.getArmor(),
                 equipment.getBoots()
         );
     }
