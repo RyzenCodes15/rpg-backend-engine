@@ -121,8 +121,14 @@ export default function CombatPage({ params }: { params: { characterId: string, 
       if (newSession) {
         setSession(newSession);
       } else {
-         // Session ended
-         if (character) character.currentHealth = 0;
+         // Session ended, backend deleted the active session.
+         // Force local state to 0 so the HP bar animates correctly before the victory screen.
+         if (response.isVictory) {
+           setSession(prev => prev ? { ...prev, monsterHp: 0 } : null);
+         } else {
+           if (character) character.currentHealth = 0;
+           setSession(prev => prev ? { ...prev, characterHp: 0 } : null);
+         }
       }
 
       if (response.isVictory || (newSession && newSession.characterHp === 0) || !newSession?.isActive) {
