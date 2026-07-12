@@ -4,6 +4,7 @@ import com.rpgengine.auth.application.dto.AuthResponse;
 import com.rpgengine.auth.application.dto.LoginRequest;
 import com.rpgengine.auth.application.dto.RegisterRequest;
 import com.rpgengine.auth.application.service.AuthService;
+import com.rpgengine.common.presentation.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,13 +27,13 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Creates a new player account and returns a JWT token.")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authService.register(request));
+    public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(authService.register(request)));
     }
 
     @PostMapping("/login")
     @Operation(summary = "Login user", description = "Authenticates a user and returns a JWT token.")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(authService.login(request)));
     }
 }

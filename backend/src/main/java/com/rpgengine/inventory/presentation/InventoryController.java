@@ -5,6 +5,7 @@ import com.rpgengine.character.domain.Character;
 import com.rpgengine.inventory.application.InventoryService;
 import com.rpgengine.inventory.domain.Inventory;
 import com.rpgengine.inventory.presentation.dto.InventoryResponse;
+import com.rpgengine.common.presentation.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class InventoryController {
 
     @GetMapping
     @Operation(summary = "Get character inventory")
-    public ResponseEntity<InventoryResponse> getInventory(
+    public ResponseEntity<ApiResponse<InventoryResponse>> getInventory(
             @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId) {
             
@@ -40,12 +41,12 @@ public class InventoryController {
         }
 
         Inventory inventory = inventoryService.getInventoryByCharacterId(characterId);
-        return ResponseEntity.ok(InventoryResponse.fromDomain(inventory));
+        return ResponseEntity.ok(ApiResponse.success(InventoryResponse.fromDomain(inventory)));
     }
 
     @PostMapping("/items/{itemId}")
     @Operation(summary = "Add an item to the inventory (Development/Testing)")
-    public ResponseEntity<Void> addItem(
+    public ResponseEntity<ApiResponse<Void>> addItem(
             @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId,
             @PathVariable UUID itemId,
@@ -57,12 +58,12 @@ public class InventoryController {
         }
 
         inventoryService.addItem(characterId, itemId, quantity);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @PostMapping("/slots/{slotId}/use")
     @Operation(summary = "Use an item from the inventory")
-    public ResponseEntity<Void> useItem(
+    public ResponseEntity<ApiResponse<Void>> useItem(
             @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId,
             @PathVariable UUID slotId) {
@@ -73,6 +74,6 @@ public class InventoryController {
         }
 
         inventoryService.useItem(characterId, slotId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

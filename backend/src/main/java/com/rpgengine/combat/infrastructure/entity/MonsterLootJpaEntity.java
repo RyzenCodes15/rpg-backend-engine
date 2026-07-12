@@ -30,8 +30,11 @@ public class MonsterLootJpaEntity {
     }
 
     public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
     public MonsterJpaEntity getMonster() { return monster; }
     public void setMonster(MonsterJpaEntity monster) { this.monster = monster; }
     public UUID getItemId() { return itemId; }
+    public void setItemId(UUID itemId) { this.itemId = itemId; }
     public BigDecimal getDropChance() { return dropChance; }
+    public void setDropChance(BigDecimal dropChance) { this.dropChance = dropChance; }
 }

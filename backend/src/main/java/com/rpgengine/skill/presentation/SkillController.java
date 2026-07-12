@@ -6,6 +6,7 @@ import com.rpgengine.common.exception.ResourceNotFoundException;
 import com.rpgengine.skill.application.SkillService;
 import com.rpgengine.skill.domain.Skill;
 import com.rpgengine.skill.presentation.dto.SkillResponse;
+import com.rpgengine.common.presentation.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class SkillController {
 
     @GetMapping("/{characterId}")
     @Operation(summary = "Get Character Skills", description = "Retrieves all available skills for a character, marking which ones are unlocked.")
-    public ResponseEntity<List<SkillResponse>> getCharacterSkills(@PathVariable UUID characterId) {
+    public ResponseEntity<ApiResponse<List<SkillResponse>>> getCharacterSkills(@PathVariable UUID characterId) {
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new ResourceNotFoundException("Character not found"));
 
@@ -63,6 +64,6 @@ public class SkillController {
                 ))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

@@ -4,6 +4,7 @@ import com.rpgengine.crafting.domain.Recipe;
 import com.rpgengine.crafting.domain.RecipeIngredient;
 import com.rpgengine.crafting.domain.repository.RecipeRepository;
 import com.rpgengine.crafting.infrastructure.entity.RecipeJpaEntity;
+import com.rpgengine.crafting.infrastructure.entity.RecipeIngredientJpaEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,6 +29,33 @@ public class RecipeRepositoryImpl implements RecipeRepository {
     @Override
     public List<Recipe> findAll() {
         return springDataRecipeRepository.findAll().stream().map(this::toDomain).collect(Collectors.toList());
+    }
+    @Override
+    public Recipe save(Recipe recipe) {
+        List<RecipeIngredientJpaEntity> ingredientEntities = recipe.getIngredients().stream()
+                .map(i -> new RecipeIngredientJpaEntity(
+                        i.getId(),
+                        i.getRecipeId(),
+                        i.getMaterialItemId(),
+                        i.getQuantity()
+                ))
+                .collect(Collectors.toList());
+
+        RecipeJpaEntity entity = new RecipeJpaEntity(
+                recipe.getId(),
+                recipe.getName(),
+                recipe.getDescription(),
+                recipe.getCraftedItemId(),
+                recipe.getRequiredLevel(),
+                ingredientEntities
+        );
+        entity = springDataRecipeRepository.save(entity);
+        return toDomain(entity);
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        springDataRecipeRepository.deleteById(id);
     }
 
     private Recipe toDomain(RecipeJpaEntity entity) {

@@ -16,7 +16,8 @@ public class UserMapper {
             entity.getPasswordHash(),
             entity.getRole(),
             entity.getCreatedAt(),
-            entity.getUpdatedAt()
+            entity.getUpdatedAt(),
+            entity.isEnabled()
         );
     }
 
@@ -30,6 +31,7 @@ public class UserMapper {
         entity.setRole(domain.getRole());
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setUpdatedAt(domain.getUpdatedAt());
+        entity.setEnabled(domain.isEnabled());
         return entity;
     }
 }

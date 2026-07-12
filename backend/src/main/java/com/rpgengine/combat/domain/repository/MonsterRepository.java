@@ -7,5 +7,7 @@ import java.util.UUID;
 
 public interface MonsterRepository {
     List<Monster> findAll();
+    void deleteById(UUID id);
     Optional<Monster> findById(UUID id);
+    Monster save(Monster monster);
 }

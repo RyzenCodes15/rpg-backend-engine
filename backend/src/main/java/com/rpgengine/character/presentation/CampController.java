@@ -2,6 +2,7 @@ package com.rpgengine.character.presentation;
 
 import com.rpgengine.character.application.CampService;
 import com.rpgengine.character.domain.Character;
+import com.rpgengine.common.presentation.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,8 @@ public class CampController {
     }
 
     @PostMapping("/rest/{characterId}")
-    public ResponseEntity<Character> restAtCamp(@PathVariable UUID characterId) {
+    public ResponseEntity<ApiResponse<Character>> restAtCamp(@PathVariable UUID characterId) {
         Character character = campService.restAtCamp(characterId);
-        return ResponseEntity.ok(character);
+        return ResponseEntity.ok(ApiResponse.success(character));
     }
 }

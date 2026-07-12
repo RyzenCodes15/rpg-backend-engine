@@ -8,6 +8,7 @@ import com.rpgengine.inventory.application.EquipmentService;
 import com.rpgengine.inventory.domain.Equipment;
 import com.rpgengine.character.domain.CharacterStatsCalculator;
 import com.rpgengine.character.domain.CharacterStats;
+import com.rpgengine.common.presentation.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -35,19 +36,19 @@ public class CharacterController {
 
     @PostMapping
     @Operation(summary = "Create a new character")
-    public ResponseEntity<CharacterResponse> createCharacter(
+    public ResponseEntity<ApiResponse<CharacterResponse>> createCharacter(
             @AuthenticationPrincipal(expression = "id") UUID userId,
             @Valid @RequestBody CreateCharacterRequest request) {
         
         Character character = characterService.createCharacter(userId, request.name(), request.characterClass());
         Equipment equipment = equipmentService.getEquipmentByCharacterId(character.getId());
         CharacterStats totalStats = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment);
-        return ResponseEntity.status(HttpStatus.CREATED).body(CharacterResponse.fromDomain(character, totalStats));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(CharacterResponse.fromDomain(character, totalStats)));
     }
 
     @GetMapping
     @Operation(summary = "Get all characters for the authenticated user")
-    public ResponseEntity<List<CharacterResponse>> getUserCharacters(@AuthenticationPrincipal(expression = "id") UUID userId) {
+    public ResponseEntity<ApiResponse<List<CharacterResponse>>> getUserCharacters(@AuthenticationPrincipal(expression = "id") UUID userId) {
         List<CharacterResponse> characters = characterService.getUserCharacters(userId).stream()
                 .map(character -> {
                     Equipment equipment = equipmentService.getEquipmentByCharacterId(character.getId());
@@ -55,12 +56,12 @@ public class CharacterController {
                     return CharacterResponse.fromDomain(character, totalStats);
                 })
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(characters);
+        return ResponseEntity.ok(ApiResponse.success(characters));
     }
 
     @GetMapping("/{characterId}")
     @Operation(summary = "Get character details")
-    public ResponseEntity<CharacterResponse> getCharacter(
+    public ResponseEntity<ApiResponse<CharacterResponse>> getCharacter(
             @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId) {
         
@@ -70,7 +71,7 @@ public class CharacterController {
         }
         Equipment equipment = equipmentService.getEquipmentByCharacterId(characterId);
         CharacterStats totalStats = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment);
-        return ResponseEntity.ok(CharacterResponse.fromDomain(character, totalStats));
+        return ResponseEntity.ok(ApiResponse.success(CharacterResponse.fromDomain(character, totalStats)));
     }
 
     @DeleteMapping("/{characterId}")
@@ -85,7 +86,7 @@ public class CharacterController {
     
     @PostMapping("/{characterId}/exp")
     @Operation(summary = "Add experience to a character (Development/Testing)")
-    public ResponseEntity<Void> addExperience(
+    public ResponseEntity<ApiResponse<Void>> addExperience(
             @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId,
             @RequestParam long amount) {
@@ -96,6 +97,6 @@ public class CharacterController {
         }
         
         characterService.addExperience(characterId, amount);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

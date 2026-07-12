@@ -6,6 +6,7 @@ import com.rpgengine.inventory.application.EquipmentService;
 import com.rpgengine.inventory.domain.Equipment;
 import com.rpgengine.inventory.domain.EquipmentSlot;
 import com.rpgengine.inventory.presentation.dto.EquipmentResponse;
+import com.rpgengine.common.presentation.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class EquipmentController {
 
     @GetMapping
     @Operation(summary = "Get character equipment")
-    public ResponseEntity<EquipmentResponse> getEquipment(
+    public ResponseEntity<ApiResponse<EquipmentResponse>> getEquipment(
             @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId) {
             
@@ -40,12 +41,12 @@ public class EquipmentController {
         }
 
         Equipment equipment = equipmentService.getEquipmentByCharacterId(characterId);
-        return ResponseEntity.ok(EquipmentResponse.fromDomain(equipment));
+        return ResponseEntity.ok(ApiResponse.success(EquipmentResponse.fromDomain(equipment)));
     }
 
     @PostMapping("/{slot}/equip/{itemId}")
     @Operation(summary = "Equip an item")
-    public ResponseEntity<Void> equipItem(
+    public ResponseEntity<ApiResponse<Void>> equipItem(
             @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId,
             @PathVariable EquipmentSlot slot,
@@ -57,12 +58,12 @@ public class EquipmentController {
         }
 
         equipmentService.equipItem(characterId, itemId, slot);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @PostMapping("/{slot}/unequip")
     @Operation(summary = "Unequip an item")
-    public ResponseEntity<Void> unequipItem(
+    public ResponseEntity<ApiResponse<Void>> unequipItem(
             @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable UUID characterId,
             @PathVariable EquipmentSlot slot) {
@@ -73,6 +74,6 @@ public class EquipmentController {
         }
 
         equipmentService.unequipItem(characterId, slot);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

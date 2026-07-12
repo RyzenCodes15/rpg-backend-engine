@@ -28,7 +28,7 @@ export const apiFetch = async (endpoint: string, options: ApiOptions = {}) => {
     const errorText = await response.text().catch(() => '');
     try {
       const errorData = JSON.parse(errorText);
-      throw new Error(errorData?.title || errorData?.message || 'An API error occurred');
+      throw new Error(errorData?.error?.message || errorData?.title || errorData?.message || 'An API error occurred');
     } catch {
       throw new Error(errorText || 'An API error occurred');
     }
@@ -48,8 +48,18 @@ export const apiFetch = async (endpoint: string, options: ApiOptions = {}) => {
   }
 
   try {
-    return JSON.parse(text);
+    const parsed = JSON.parse(text);
+    if (parsed && typeof parsed === 'object' && 'success' in parsed && 'data' in parsed) {
+      if (!parsed.success) {
+        throw new Error(parsed.error?.message || 'An API error occurred');
+      }
+      return parsed.data;
+    }
+    return parsed;
   } catch (error) {
+    if (error instanceof Error && error.message !== 'Invalid JSON response from server') {
+      throw error;
+    }
     console.error('Failed to parse JSON response:', text);
     throw new Error('Invalid JSON response from server');
   }

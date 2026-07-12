@@ -3,6 +3,7 @@ package com.rpgengine.combat.presentation;
 import com.rpgengine.combat.application.MonsterService;
 import com.rpgengine.combat.domain.Monster;
 import com.rpgengine.combat.presentation.dto.MonsterResponse;
+import com.rpgengine.common.presentation.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -25,18 +26,18 @@ public class MonsterController {
 
     @GetMapping
     @Operation(summary = "Get all monsters", description = "Retrieves a list of all available monsters in the game.")
-    public ResponseEntity<List<MonsterResponse>> getAllMonsters() {
+    public ResponseEntity<ApiResponse<List<MonsterResponse>>> getAllMonsters() {
         List<MonsterResponse> responses = monsterService.getAllMonsters().stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(ApiResponse.success(responses));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a monster by ID", description = "Retrieves a single monster's details by its ID.")
-    public ResponseEntity<MonsterResponse> getMonsterById(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<MonsterResponse>> getMonsterById(@PathVariable UUID id) {
         Monster monster = monsterService.getMonsterById(id);
-        return ResponseEntity.ok(mapToResponse(monster));
+        return ResponseEntity.ok(ApiResponse.success(mapToResponse(monster)));
     }
 
     private MonsterResponse mapToResponse(Monster monster) {

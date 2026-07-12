@@ -11,6 +11,7 @@ public class User {
     private Role role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private boolean enabled = true;
 
     // Constructors
     public User() {}
@@ -23,6 +24,18 @@ public class User {
         this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.enabled = true;
+    }
+
+    public User(UUID id, String username, String email, String passwordHash, Role role, LocalDateTime createdAt, LocalDateTime updatedAt, boolean enabled) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.role = role;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.enabled = enabled;
     }
 
     // Getters and Setters
@@ -46,4 +59,7 @@ public class User {
     
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    
+    public boolean isEnabled() { return enabled; }
+    public void setEnabled(boolean enabled) { this.enabled = enabled; }
 }

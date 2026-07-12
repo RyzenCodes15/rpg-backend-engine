@@ -46,7 +46,31 @@ public class MonsterJpaEntity {
     @OneToMany(mappedBy = "monster", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MonsterLootJpaEntity> lootTable = new ArrayList<>();
 
-    protected MonsterJpaEntity() {}
+    public MonsterJpaEntity() {}
+
+    public void setId(UUID id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setDescription(String description) { this.description = description; }
+    public void setLevel(int level) { this.level = level; }
+    public void setHealth(int health) { this.health = health; }
+    public void setAttack(int attack) { this.attack = attack; }
+    public void setDefense(int defense) { this.defense = defense; }
+    public void setSpeed(int speed) { this.speed = speed; }
+    public void setGoldReward(long goldReward) { this.goldReward = goldReward; }
+    public void setExperienceReward(long experienceReward) { this.experienceReward = experienceReward; }
+    public void setLootTable(List<MonsterLootJpaEntity> lootTable) { this.lootTable = lootTable; }
+    
+    public UUID getId() { return id; }
+    public String getName() { return name; }
+    public String getDescription() { return description; }
+    public int getLevel() { return level; }
+    public int getHealth() { return health; }
+    public int getAttack() { return attack; }
+    public int getDefense() { return defense; }
+    public int getSpeed() { return speed; }
+    public long getGoldReward() { return goldReward; }
+    public long getExperienceReward() { return experienceReward; }
+    public List<MonsterLootJpaEntity> getLootTable() { return lootTable; }
 
     public Monster toDomain() {
         List<MonsterLoot> domainLoot = lootTable.stream()

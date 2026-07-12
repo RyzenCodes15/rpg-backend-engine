@@ -6,6 +6,7 @@ import com.rpgengine.combat.presentation.dto.CombatHistoryResponse;
 import com.rpgengine.combat.presentation.dto.CombatResponse;
 import com.rpgengine.combat.presentation.dto.CombatSessionResponse;
 import com.rpgengine.combat.presentation.dto.ExecuteTurnRequest;
+import com.rpgengine.common.presentation.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class CombatController {
 
     @PostMapping("/{characterId}/start/{monsterId}")
     @Operation(summary = "Start Combat", description = "Starts a new interactive combat session.")
-    public ResponseEntity<CombatSessionResponse> startCombat(
+    public ResponseEntity<ApiResponse<CombatSessionResponse>> startCombat(
             @PathVariable UUID characterId,
             @PathVariable UUID monsterId) {
         CombatSession session = combatService.startCombat(characterId, monsterId);
@@ -42,22 +43,22 @@ public class CombatController {
                 session.getMonsterHp(),
                 session.getCooldowns()
         );
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @PostMapping("/{characterId}/turn")
     @Operation(summary = "Execute Turn", description = "Executes a single combat turn using a basic attack or skill.")
-    public ResponseEntity<CombatResponse> executeTurn(
+    public ResponseEntity<ApiResponse<CombatResponse>> executeTurn(
             @PathVariable UUID characterId,
             @RequestBody(required = false) ExecuteTurnRequest request) {
         UUID skillId = request != null ? request.skillId() : null;
         CombatResponse response = combatService.executeTurn(characterId, skillId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @GetMapping("/{characterId}/session")
     @Operation(summary = "Get Active Session", description = "Retrieves the current active combat session.")
-    public ResponseEntity<CombatSessionResponse> getActiveSession(@PathVariable UUID characterId) {
+    public ResponseEntity<ApiResponse<CombatSessionResponse>> getActiveSession(@PathVariable UUID characterId) {
         CombatSession session = combatService.getActiveSession(characterId);
         CombatSessionResponse response = new CombatSessionResponse(
                 session.getId(),
@@ -69,12 +70,12 @@ public class CombatController {
                 session.getMonsterHp(),
                 session.getCooldowns()
         );
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @GetMapping("/{characterId}/history")
     @Operation(summary = "Get Combat History", description = "Retrieves the combat history for a specific character.")
-    public ResponseEntity<List<CombatHistoryResponse>> getHistory(@PathVariable UUID characterId) {
+    public ResponseEntity<ApiResponse<List<CombatHistoryResponse>>> getHistory(@PathVariable UUID characterId) {
         List<CombatHistoryResponse> history = combatService.getCharacterHistory(characterId).stream()
                 .map(h -> new CombatHistoryResponse(
                         h.getId(),
@@ -87,6 +88,6 @@ public class CombatController {
                         h.getTimestamp()
                 ))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(history);
+        return ResponseEntity.ok(ApiResponse.success(history));
     }
 }

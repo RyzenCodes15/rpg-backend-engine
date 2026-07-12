@@ -34,6 +34,31 @@ public class SkillRepositoryImpl implements SkillRepository {
     public List<Skill> findByClassRestriction(CharacterClass classRestriction) {
         return springDataSkillRepository.findByClassRestriction(classRestriction).stream().map(this::toDomain).collect(Collectors.toList());
     }
+    @Override
+    public Skill save(Skill skill) {
+        SkillJpaEntity entity = new SkillJpaEntity(
+                skill.getId(),
+                skill.getName(),
+                skill.getDescription(),
+                skill.getClassRestriction(),
+                skill.getRequiredLevel(),
+                skill.getManaCost(),
+                skill.getCooldown(),
+                skill.getBaseDamage(),
+                skill.getSkillType(),
+                skill.getElement(),
+                skill.getIcon(),
+                skill.getAnimationName(),
+                skill.getStatusEffectType()
+        );
+        entity = springDataSkillRepository.save(entity);
+        return toDomain(entity);
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        springDataSkillRepository.deleteById(id);
+    }
 
     private Skill toDomain(SkillJpaEntity entity) {
         return new Skill(

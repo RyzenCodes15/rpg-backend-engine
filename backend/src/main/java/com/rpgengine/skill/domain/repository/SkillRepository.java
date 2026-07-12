@@ -10,5 +10,7 @@ import java.util.UUID;
 public interface SkillRepository {
     Optional<Skill> findById(UUID id);
     List<Skill> findAll();
+    Skill save(Skill skill);
+    void deleteById(UUID id);
     List<Skill> findByClassRestriction(CharacterClass classRestriction);
 }

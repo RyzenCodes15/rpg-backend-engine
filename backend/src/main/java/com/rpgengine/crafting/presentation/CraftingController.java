@@ -3,6 +3,7 @@ package com.rpgengine.crafting.presentation;
 import com.rpgengine.crafting.application.CraftingService;
 import com.rpgengine.crafting.presentation.dto.RecipeIngredientResponse;
 import com.rpgengine.crafting.presentation.dto.RecipeResponse;
+import com.rpgengine.common.presentation.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class CraftingController {
 
     @GetMapping("/recipes")
     @Operation(summary = "Get All Recipes", description = "Retrieves a list of all available recipes.")
-    public ResponseEntity<List<RecipeResponse>> getAllRecipes() {
+    public ResponseEntity<ApiResponse<List<RecipeResponse>>> getAllRecipes() {
         List<RecipeResponse> responses = craftingService.getAllRecipes().stream()
                 .map(r -> {
                     String craftedItemName = itemRepository.findById(r.getCraftedItemId())
@@ -52,19 +53,19 @@ public class CraftingController {
                     );
                 })
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(ApiResponse.success(responses));
     }
 
     @PostMapping("/{characterId}/craft/{recipeId}")
     @Operation(summary = "Craft an Item", description = "Attempts to craft an item for a character using a specific recipe.")
-    public ResponseEntity<String> craftItem(
+    public ResponseEntity<ApiResponse<String>> craftItem(
             @PathVariable UUID characterId,
             @PathVariable UUID recipeId) {
         boolean success = craftingService.craftItem(characterId, recipeId);
         if (success) {
-            return ResponseEntity.ok("Successfully crafted item!");
+            return ResponseEntity.ok(ApiResponse.success("Successfully crafted item!"));
         } else {
-            return ResponseEntity.badRequest().body("Failed to craft item.");
+            return ResponseEntity.badRequest().body(ApiResponse.error("CRAFT_FAILED", "Failed to craft item.", null));
         }
     }
 }

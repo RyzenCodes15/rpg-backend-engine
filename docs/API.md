@@ -32,3 +32,15 @@ Retrieves the combat history for a specific character.
 
 ## Error Handling
 The API follows RFC 7807 Problem Details.
+
+## Admin API
+
+Admin API endpoints are mapped under `/api/v1/admin/**`. They are protected by JWT and require `ROLE_ADMIN`.
+
+### User Management
+- `GET /api/v1/admin/users`: Fetch paginated users.
+- `PUT /api/v1/admin/users/{userId}/status`: Ban or unban users.
+- `PUT /api/v1/admin/users/{userId}/role`: Change user roles.
+
+### Content Management
+- CRUD operations available for `/admin/items`, `/admin/monsters`, `/admin/skills`, and `/admin/recipes`.
