@@ -1,170 +1,102 @@
-# Scalable Multiplayer RPG Backend Engine
+# Full-Stack RPG Game
 
-A production-quality full-stack software engineering project that powers the backend infrastructure and management interface of an online RPG.
+A Full-Stack RPG Game built with Spring Boot, Next.js, and PostgreSQL. Features a robust Clean Architecture backend with package-by-feature organization, comprehensive JWT authentication, and a pixel-art styled React frontend.
 
-## Screenshots
+## 🌟 Features
 
-![Landing Page](docs/images/landing-page.png)
-![Login](docs/images/login.png)
-![Register](docs/images/register.png)
-![Character Dashboard](docs/images/character-dashboard.png)
-![Character Creation](docs/images/character-creation.png)
-![Inventory](docs/images/inventory.png)
-![Equipment](docs/images/equipment.png)
-![Swagger UI](docs/images/swagger-ui.png)
+- **Robust Authentication & Authorization**: Secure JWT-based auth with Role-Based Access Control (RBAC). Admin and Player roles.
+- **Clean Architecture Backend**: Organized by feature (Auth, Character, Combat, Inventory, Admin) using Spring Boot and Spring Data JPA.
+- **Dynamic Combat System**: Turn-based combat engine calculating damage, critical hits, speed, and status effects.
+- **Inventory & Equipment Management**: Full inventory system with equippable gear affecting combat stats.
+- **Crafting System**: Gather materials and craft powerful items using recipes.
+- **Admin Dashboard**: Full CRUD management interface for Users, Items, Monsters, Skills, and Recipes.
+- **Modern Frontend**: Next.js 14 App Router, Tailwind CSS, TypeScript, and a responsive pixel-art UI.
+- **Containerized**: Fully Dockerized environment for seamless local development and deployment.
 
-## Features
+## 🏗️ Architecture & Tech Stacks
 
-**Implemented ✅**
-- Stateless JWT Authentication (Register/Login)
-- Character Management (Create, List, View, Delete)
-- Inventory Management (Items, Quantity)
-- Equipment System (Paper-doll style slots, Equip/Unequip)
-- Base Stats & Progression (Leveling up, Stat Growth Strategies)
-- Swagger API Documentation
+### Backend (Spring Boot 3 + Java 17)
+- **Framework**: Spring Boot (Web, Data JPA, Security)
+- **Database**: PostgreSQL
+- **Authentication**: JSON Web Tokens (JWT)
+- **Design Pattern**: Clean Architecture, Package-by-Feature, AOP (Aspect-Oriented Programming)
 
-**Planned 🚧**
-- Combat System
-- Skills & Abilities
-- Crafting System
-- Quests
-- Guilds
-- Trading
-- Marketplace
-- Leaderboards
-- Admin Panel
+### Frontend (Next.js 14 + React)
+- **Framework**: Next.js (App Router)
+- **Styling**: Tailwind CSS
+- **Language**: TypeScript
+- **State Management**: React Hooks (`useState`, `useEffect`, `useCallback`)
 
-## Tech Stack
+### Infrastructure
+- **Containerization**: Docker & Docker Compose
+- **Build Tool**: Maven / npm
 
-- **Backend:** Java 21, Spring Boot 3, Spring Security, Spring Data JPA
-- **Frontend:** Next.js 14 (App Router), React, Tailwind CSS, TypeScript
-- **Database:** PostgreSQL 16, Flyway (Migrations)
-- **Authentication:** JWT (JSON Web Tokens)
-- **Testing:** JUnit 5, Mockito
-- **Containerization:** Docker, Docker Compose
-- **Documentation:** Swagger / OpenAPI 3, PlantUML
+## 🚀 Getting Started
 
-## Architecture
+### Prerequisites
+- Docker and Docker Compose
+- Java 17 (for local development outside Docker)
+- Node.js 18+ (for local development outside Docker)
 
-This project strictly adheres to production-grade architectural patterns:
-- **Clean Architecture (Hexagonal):** Strict separation of concerns using Presentation, Application, Domain, and Infrastructure layers. The domain model remains completely isolated from external frameworks or database concerns.
-- **Package-by-Feature:** Code is grouped by business capability (e.g., `auth`, `character`, `inventory`) to improve maintainability, cohesion, and allow for easier microservice extraction in the future.
-- **SOLID Principles:** Applied throughout the codebase, utilizing Dependency Inversion via Interfaces and ensuring Single Responsibility in Services and Mappers.
+### Running with Docker (Recommended)
 
-## Project Structure
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/full-stack-rpg-game.git
+   cd full-stack-rpg-game
+   ```
 
-```text
-rpg-backend-engine/
-├── backend/            # Spring Boot backend
-│   ├── src/main/java/com/rpgengine/
-│   │   ├── auth/       # Authentication module
-│   │   ├── character/  # Character module
-│   │   ├── inventory/  # Inventory & Equipment module
-│   │   └── common/     # Shared configuration & exceptions
-│   └── src/main/resources/
-│       ├── db/migration/  # Flyway SQL migrations
-│       └── application.yml
-├── frontend/           # Next.js frontend
-│   └── src/
-│       ├── app/        # App Router pages and layouts
-│       ├── components/ # Reusable UI components
-│       └── lib/        # API client and utilities
-├── docs/               # UML and architecture documentation
-└── docker-compose.yml  # Local development orchestration
-```
+2. Start the services:
+   ```bash
+   docker compose up --build
+   ```
 
-## UML Documentation
+3. Access the application:
+   - Frontend: [http://localhost:3001](http://localhost:3001)
+   - Backend API: [http://localhost:8080](http://localhost:8080)
 
-UML diagrams detailing Entity-Relationship (ER) models and architecture are located in the `docs/uml/` directory. They are written using **PlantUML** (`.puml` format) and can be rendered using the PlantUML extension for VS Code or IntelliJ.
+*The database will be automatically initialized with test data, including an admin user (`admin` / `admin`).*
 
-## API Documentation
+### Local Development (Without Docker)
 
-The API is fully documented using Swagger UI.
-When the backend is running, access Swagger at: `http://localhost:8080/swagger-ui.html`
-
-## Local Development
-
-The easiest way to run the project is using Docker Compose.
-
-```bash
-docker compose up --build
-```
-
-This will start:
-- **PostgreSQL** on port 5433 (Internal port 5432)
-- **Backend** on `http://localhost:8080`
-- **Frontend** on `http://localhost:3001`
-- **pgAdmin** on `http://localhost:5050`
-
-## Running Without Docker
-
-If you prefer to run the services directly on your host machine:
-
-**Backend:**
-Make sure PostgreSQL is running on port 5432 with the required credentials matching the database configuration.
+#### Backend
 ```bash
 cd backend
+mvn clean install
 mvn spring-boot:run
 ```
+*(Requires a running PostgreSQL instance on localhost:5432 with db `rpgdb`, user `postgres`, pass `postgres`)*
 
-**Frontend:**
+#### Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-The frontend will start on `http://localhost:3000`.
 
-## Environment Variables
+## 🎮 Gameplay Systems
 
-### Backend Configuration
-These variables are configured via `application.yml` or Docker Compose environment variables:
-- `SPRING_DATASOURCE_URL`: `jdbc:postgresql://localhost:5432/rpg_engine` (default)
-- `SPRING_DATASOURCE_USERNAME`: `rpg_user`
-- `SPRING_DATASOURCE_PASSWORD`: `rpg_password`
-- `JWT_SECRET`: The secret key used for signing JWTs (must be at least 256 bits).
-- `JWT_EXPIRATION`: Token expiration time in milliseconds.
+- **Characters**: Create and manage multiple heroes per account (Warrior, Mage, Rogue).
+- **Combat**: Engage monsters. Stats (Attack, Defense, Speed) dictate combat outcomes.
+- **Inventory**: Collect loot, use consumables (potions), and manage your stash.
+- **Equipment**: Equip weapons and armor to boost your core stats.
+- **Crafting**: Combine materials into powerful weapons and gear.
+- **Skills**: Unlock class-specific abilities as you level up.
 
-### Frontend Configuration (`.env.local`)
-- `NEXT_PUBLIC_API_URL`: The URL of the backend API (defaults to `http://localhost:8080/api/v1`).
+## 🛡️ Admin Dashboard
 
-## Current Progress
+Accessible only to `ROLE_ADMIN` users. Provides a complete CMS to manage the game world:
+- **User Management**: Ban/unban users, change roles.
+- **Content Management**: Create, edit, and delete Items, Monsters, Skills, and Recipes on the fly.
 
-- ✅ Authentication
-- ✅ Character System
-- ✅ Inventory
-- ✅ Equipment
-- 🚧 Combat
-- 🚧 Skills
-- 🚧 Crafting
-- 🚧 Quests
-- 🚧 Guilds
-- 🚧 Trading
-- 🚧 Marketplace
-- 🚧 Leaderboards
-- 🚧 Admin Panel
+## 🧪 Testing
 
-## Design Patterns Used
-
-- **Factory Pattern**: Used in `StatGrowthStrategyFactory` to instantiate the correct stat progression strategy based on a chosen character class.
-- **Strategy Pattern**: Used for `StatGrowthStrategy` to handle different leveling curves and base stat calculation for Warriors, Mages, and Rogues.
-- **Data Transfer Object (DTO)**: Employed heavily in the Presentation layer to isolate the rich Domain models from API contracts.
-- **Repository Pattern**: Used to abstract database access and persistence logic away from the Application layer.
-
-## Testing
-
-To run the unit tests for the backend:
+The backend includes a comprehensive suite of unit and integration tests.
 ```bash
 cd backend
-mvn test
+mvn clean test
 ```
 
-## Future Roadmap
+## 📝 License
 
-- **Combat Engine:** Implement a scalable, turn-based combat engine with skill modifiers.
-- **Skill Trees:** Introduce active and passive abilities that integrate with character levels.
-- **World Infrastructure:** Add quests and an Admin Panel for managing the game world state.
-
-## License
-
-MIT License.
+This project is licensed under the MIT License.

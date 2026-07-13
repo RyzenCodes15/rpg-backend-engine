@@ -2,7 +2,7 @@
 
 ## Authentication System
 
-The RPG Backend Engine uses **JSON Web Tokens (JWT)** for stateless authentication.
+The Full-Stack RPG Game uses **JSON Web Tokens (JWT)** for stateless authentication.
 
 ### Token Characteristics
 - **Algorithm**: HMAC SHA-256

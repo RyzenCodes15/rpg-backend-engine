@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'RPG Engine Management',
-  description: 'Scalable Multiplayer RPG Backend Engine Interface',
+  title: 'Full-Stack RPG Game',
+  description: 'Full-Stack RPG Game Interface',
 };
 
 export default function RootLayout({

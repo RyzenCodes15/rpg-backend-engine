@@ -14,8 +14,8 @@
     <groupId>com.rpgengine</groupId>
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>rpg-backend-engine</name>
-    <description>Scalable Multiplayer RPG Backend Engine</description>
+    <name>full-stack-rpg-game</name>
+    <description>Full-Stack RPG Game</description>
 
     <properties>
         <java.version>21</java.version>

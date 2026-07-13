@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Character, getCharacter, deleteCharacter, addExperience } from '@/lib/api/character';
 import { addTestItem } from '@/lib/api/inventory';
@@ -19,7 +19,7 @@ export default function CharacterDashboardPage({ params }: { params: { character
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [charData, historyData, eqData] = await Promise.all([
         getCharacter(params.characterId),
@@ -36,11 +36,11 @@ export default function CharacterDashboardPage({ params }: { params: { character
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.characterId]);
 
   useEffect(() => {
     fetchData();
-  }, [params.characterId]);
+  }, [fetchData]);
 
   const handleDelete = async () => {
     if (confirm('Are you sure you want to delete this character forever?')) {

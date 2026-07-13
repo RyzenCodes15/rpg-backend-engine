@@ -1,6 +1,6 @@
 # Architecture Overview
 
-This project utilizes a Clean Architecture (Hexagonal Architecture) model combined with Domain-Driven Design (DDD) to encapsulate and protect the core business logic of the RPG engine.
+This project utilizes a Clean Architecture (Hexagonal Architecture) model combined with Domain-Driven Design (DDD) to encapsulate and protect the core business logic of the Full-Stack RPG Game.
 
 ## Architectural Layers
 

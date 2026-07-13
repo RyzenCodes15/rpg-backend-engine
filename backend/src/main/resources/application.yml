@@ -1,6 +1,6 @@
 spring:
   application:
-    name: rpg-backend-engine
+    name: full-stack-rpg-game
   
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/rpg_engine}

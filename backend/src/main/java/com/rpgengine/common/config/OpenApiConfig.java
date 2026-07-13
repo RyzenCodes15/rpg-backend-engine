@@ -17,8 +17,8 @@ public class OpenApiConfig {
     public OpenAPI rpgEngineOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("RPG Backend Engine API")
-                        .description("API Documentation for the Scalable Multiplayer RPG Backend Engine")
+                        .title("Full-Stack RPG Game API")
+                        .description("API Documentation for the Full-Stack RPG Game")
                         .version("v1.0.0"))
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
                 .components(new Components()

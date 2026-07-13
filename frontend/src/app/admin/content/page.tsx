@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { apiFetch } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
@@ -26,11 +26,7 @@ export default function AdminContent() {
   const [editEntity, setEditEntity] = useState<any>(null);
   const [formData, setFormData] = useState<any>({});
 
-  useEffect(() => {
-    fetchData();
-  }, [activeTab]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       if (activeTab === 'ITEMS') {
@@ -51,7 +47,11 @@ export default function AdminContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this?')) return;
@@ -144,16 +144,24 @@ export default function AdminContent() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
-              {(activeTab === 'ITEMS' ? items : activeTab === 'MONSTERS' ? monsters : activeTab === 'SKILLS' ? skills : recipes).map((item: any) => (
-                <tr key={item.id} className="hover:bg-gray-800/50 transition-colors">
-                  <td className="px-6 py-4 font-bold text-white">{item.name}</td>
-                  <td className="px-6 py-4 text-sm truncate max-w-xs text-gray-400">{item.description}</td>
-                  <td className="px-6 py-4 text-right space-x-3">
-                    <button onClick={() => openEditModal(item)} className="text-blue-400 hover:text-blue-300 text-sm font-medium">Edit</button>
-                    <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300 text-sm font-medium">Delete</button>
+              {(activeTab === 'ITEMS' ? items : activeTab === 'MONSTERS' ? monsters : activeTab === 'SKILLS' ? skills : recipes).length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="px-6 py-8 text-center text-gray-500 font-medium">
+                    No {activeTab.toLowerCase()} found.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                (activeTab === 'ITEMS' ? items : activeTab === 'MONSTERS' ? monsters : activeTab === 'SKILLS' ? skills : recipes).map((item: any) => (
+                  <tr key={item.id} className="hover:bg-gray-800/50 transition-colors">
+                    <td className="px-6 py-4 font-bold text-white">{item.name}</td>
+                    <td className="px-6 py-4 text-sm truncate max-w-xs text-gray-400">{item.description}</td>
+                    <td className="px-6 py-4 text-right space-x-3">
+                      <button onClick={() => openEditModal(item)} className="text-blue-400 hover:text-blue-300 text-sm font-medium">Edit</button>
+                      <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300 text-sm font-medium">Delete</button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         )}

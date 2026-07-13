@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { apiFetch } from '@/lib/api';
 import Modal from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
@@ -23,7 +23,7 @@ export default function AdminUsers() {
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [newRole, setNewRole] = useState('PLAYER');
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const res = await apiFetch(`/admin/users?page=${page}&size=10`);
@@ -34,11 +34,11 @@ export default function AdminUsers() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page]);
 
   useEffect(() => {
     fetchUsers();
-  }, [page]);
+  }, [fetchUsers]);
 
   const toggleStatus = async (user: User) => {
     try {
@@ -94,43 +94,51 @@ export default function AdminUsers() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
-              {users.map(user => (
-                <tr key={user.id} className="hover:bg-gray-800/50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-white">{user.username}</td>
-                  <td className="px-6 py-4">{user.email}</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                      user.role === 'ROLE_ADMIN' ? 'bg-purple-500/20 text-purple-400' : 'bg-blue-500/20 text-blue-400'
-                    }`}>
-                      {user.role.replace('ROLE_', '')}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                      user.enabled ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-                    }`}>
-                      {user.enabled ? 'Active' : 'Banned'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 text-right space-x-3">
-                    <button 
-                      onClick={() => openRoleModal(user)}
-                      className="text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium"
-                    >
-                      Change Role
-                    </button>
-                    <button 
-                      onClick={() => toggleStatus(user)}
-                      className={`${user.enabled ? 'text-red-400 hover:text-red-300' : 'text-green-400 hover:text-green-300'} transition-colors text-sm font-medium`}
-                    >
-                      {user.enabled ? 'Ban' : 'Unban'}
-                    </button>
+              {users.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500 font-medium">
+                    No users found.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                users.map(user => (
+                  <tr key={user.id} className="hover:bg-gray-800/50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-white">{user.username}</td>
+                    <td className="px-6 py-4">{user.email}</td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                        user.role === 'ROLE_ADMIN' ? 'bg-purple-500/20 text-purple-400' : 'bg-blue-500/20 text-blue-400'
+                      }`}>
+                        {user.role.replace('ROLE_', '')}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                        user.enabled ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                      }`}>
+                        {user.enabled ? 'Active' : 'Banned'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 text-right space-x-3">
+                      <button 
+                        onClick={() => openRoleModal(user)}
+                        className="text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium"
+                      >
+                        Change Role
+                      </button>
+                      <button 
+                        onClick={() => toggleStatus(user)}
+                        className={`${user.enabled ? 'text-red-400 hover:text-red-300' : 'text-green-400 hover:text-green-300'} transition-colors text-sm font-medium`}
+                      >
+                        {user.enabled ? 'Ban' : 'Unban'}
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         )}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { craftingApi, RecipeResponse } from '@/lib/api/crafting';
 import { getInventory, Inventory } from '@/lib/api/inventory';
 import { Card } from '@/components/ui/Card';
@@ -15,7 +15,7 @@ export default function CraftingPage({ params }: { params: { characterId: string
   const [error, setError] = useState<string | null>(null);
   const [craftingMessage, setCraftingMessage] = useState<string | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [recipesData, invData] = await Promise.all([
         craftingApi.getAllRecipes(),
@@ -28,11 +28,11 @@ export default function CraftingPage({ params }: { params: { characterId: string
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.characterId]);
 
   useEffect(() => {
     fetchData();
-  }, [params.characterId]);
+  }, [fetchData]);
 
   const handleCraft = async (recipeId: string) => {
     setCraftingMessage(null);
