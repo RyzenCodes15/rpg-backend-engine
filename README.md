@@ -10,7 +10,7 @@ A Production-Grade Full-Stack RPG built using Spring Boot, Next.js, PostgreSQL a
 [![Java](https://img.shields.io/badge/Java-21%20LTS-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4+-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-**Monster Maniac** is a high-performance, containerized multiplayer RPG backend engine paired with a dynamic, pixel-art styled Next.js frontend. Engineered from the ground up following **Clean Architecture** principles, the system delivers secure role-based authentication, real-time turn-based combat calculations, modular inventory and equipment management, complex item crafting, and a full administrative suite.
+**Monster Maniac** is a high-performance, containerized RPG game paired with a dynamic, pixel-art styled Next.js frontend. Engineered from the ground up following **Clean Architecture** principles, the system delivers secure role-based authentication, real-time turn-based combat calculations, modular inventory and equipment management, complex item crafting, and a full administrative suite.
 
 ---
 
