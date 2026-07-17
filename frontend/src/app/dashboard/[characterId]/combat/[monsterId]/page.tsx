@@ -34,7 +34,12 @@ export default function CombatPage({ params }: { params: { characterId: string, 
   const [monsterDamageText, setMonsterDamageText] = useState<{id: number, text: string, type: string}[]>([]);
   const [damageIdSeq, setDamageIdSeq] = useState(0);
 
+  const initRef = React.useRef(false);
+
   useEffect(() => {
+    if (initRef.current) return;
+    initRef.current = true;
+
     const initCombat = async () => {
       try {
         const [charData, monsterData, skillsData, sessionData] = await Promise.all([
@@ -420,21 +425,30 @@ export default function CombatPage({ params }: { params: { characterId: string, 
                       className="w-full max-w-lg mt-4 border-t-2 border-rpg-border/50 pt-6"
                     >
                       <h4 className="font-pixel text-sm text-gray-400 mb-4">Loot Dropped:</h4>
-                      <div className="flex flex-wrap justify-center gap-4">
-                        {finalResult.itemsDropped.map((itemName, idx) => (
-                          <motion.div 
-                            key={idx} 
-                            initial={{ scale: 0, rotate: -20 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            transition={{ delay: 1.2 + (idx * 0.2), type: 'spring' }}
-                            className="flex flex-col items-center group"
-                          >
-                            <div className="w-16 h-16 relative bg-rpg-surface border-4 border-rpg-border pixel-border hover:border-yellow-400 transition-colors cursor-help mb-2 p-1">
-                              <ItemIcon item={itemName} className="w-full h-full" />
-                            </div>
-                            <span className="text-xs font-retro text-gray-300 group-hover:text-white transition-colors">{itemName}</span>
-                          </motion.div>
-                        ))}
+                      <div className="flex flex-wrap justify-center gap-6">
+                        {finalResult.itemsDropped.map((itemName, idx) => {
+                          const isLegendary = itemName === 'Orc Tooth' || itemName === 'Shiny Sword';
+                          return (
+                            <motion.div 
+                              key={idx} 
+                              initial={{ scale: 0, y: 25, rotate: -15 }}
+                              animate={{ scale: 1, y: 0, rotate: 0 }}
+                              transition={{ delay: 1.2 + (idx * 0.25), type: 'spring', bounce: 0.5 }}
+                              className="flex flex-col items-center group"
+                            >
+                              <div className={`w-20 h-20 relative pixel-border transition-all duration-300 cursor-help mb-2.5 p-1.5 flex items-center justify-center ${
+                                isLegendary 
+                                  ? 'bg-orange-950/80 border-4 border-orange-500 shadow-[0_0_16px_rgba(249,115,22,0.65)] hover:border-yellow-400 hover:scale-105' 
+                                  : 'bg-rpg-surface border-4 border-rpg-border hover:border-yellow-400'
+                              }`}>
+                                <ItemIcon item={itemName} className="w-full h-full border-0 bg-transparent shadow-none p-0.5" />
+                              </div>
+                              <span className={`text-xs font-retro transition-colors ${
+                                isLegendary ? 'text-orange-400 font-bold group-hover:text-yellow-300' : 'text-gray-300 group-hover:text-white'
+                              }`}>{itemName}</span>
+                            </motion.div>
+                          );
+                        })}
                       </div>
                     </motion.div>
                   )}

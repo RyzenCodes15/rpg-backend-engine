@@ -2,6 +2,8 @@ package com.rpgengine.combat.application;
 
 import com.rpgengine.character.application.CharacterService;
 import com.rpgengine.character.domain.Character;
+import com.rpgengine.character.domain.CharacterStats;
+import com.rpgengine.character.domain.CharacterStatsCalculator;
 import com.rpgengine.combat.domain.CombatHistory;
 import com.rpgengine.combat.domain.LootGenerator;
 import com.rpgengine.combat.domain.Monster;
@@ -57,15 +59,22 @@ public class CombatService {
 
     @Transactional
     public CombatSession startCombat(UUID characterId, UUID monsterId) {
-        // End any existing session
-        Optional<CombatSession> existing = combatSessionRepository.findActiveSessionByCharacterId(characterId);
-        if (existing.isPresent()) {
-            CombatSession session = existing.get();
-            session.setActive(false);
-            combatSessionRepository.save(session);
+        // End ALL existing active sessions for this character to prevent duplicate session errors
+        List<CombatSession> existingSessions = combatSessionRepository.findAllActiveSessionsByCharacterId(characterId);
+        for (CombatSession existing : existingSessions) {
+            existing.setActive(false);
+            combatSessionRepository.save(existing);
         }
 
         Character character = characterService.getCharacter(characterId);
+        if (character.getCurrentHealth() <= 0) {
+            Equipment equipment = equipmentService.getEquipmentByCharacterId(characterId);
+            CharacterStats totalStats = CharacterStatsCalculator.calculateTotalStats(character.getBaseStats(), equipment);
+            character.setCurrentHealth(totalStats.health());
+            character.setCurrentMana(totalStats.mana());
+            characterService.updateCharacter(character);
+        }
+
         Monster monster = monsterService.getMonsterById(monsterId);
 
         CombatSession session = new CombatSession(

@@ -51,7 +51,13 @@ public class CombatSessionRepositoryImpl implements CombatSessionRepository {
 
     @Override
     public Optional<CombatSession> findActiveSessionByCharacterId(UUID characterId) {
-        return springDataCombatSessionRepository.findByCharacterIdAndIsActiveTrue(characterId).map(this::toDomain);
+        return springDataCombatSessionRepository.findFirstByCharacterIdAndIsActiveTrueOrderByStartedAtDesc(characterId).map(this::toDomain);
+    }
+
+    @Override
+    public List<CombatSession> findAllActiveSessionsByCharacterId(UUID characterId) {
+        return springDataCombatSessionRepository.findAllByCharacterIdAndIsActiveTrue(characterId)
+                .stream().map(this::toDomain).collect(Collectors.toList());
     }
 
     @Override

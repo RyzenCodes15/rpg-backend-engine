@@ -16,9 +16,9 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
 
   const getRarityBorder = (rarity: string) => {
     switch (rarity) {
-      case 'COMMON': return 'border-white';
-      case 'RARE': return 'border-blue-500';
-      case 'LEGENDARY': return 'border-orange-500';
+      case 'COMMON': return 'border-white hover:border-slate-300';
+      case 'RARE': return 'border-blue-500 hover:border-blue-300 shadow-[inset_0_0_8px_rgba(59,130,246,0.25)]';
+      case 'LEGENDARY': return 'border-orange-500 hover:border-orange-300 shadow-[inset_0_0_12px_rgba(249,115,22,0.4)] bg-orange-950/20';
       default: return 'border-rpg-border';
     }
   };
@@ -35,15 +35,15 @@ export const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equipment, onUne
       >
         {item ? (
           <ItemTooltip item={item}>
-            <div className="w-full h-full flex items-center justify-center p-2">
-              <div className="relative w-full h-full">
-                <ItemIcon item={item} size={64} className="w-full h-full drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] bg-transparent border-0" />
+            <div className="w-full h-full flex items-center justify-center p-1.5">
+              <div className="relative w-full h-full flex items-center justify-center">
+                <ItemIcon item={item} className="w-full h-full bg-transparent border-0 shadow-none p-0.5" />
               </div>
             </div>
           </ItemTooltip>
         ) : (
-          <div className="relative w-full h-full opacity-30">
-            <ItemIcon item={{ name: slotType, category: slotType } as any} size={64} className="w-full h-full p-3 opacity-30 grayscale bg-transparent border-0" />
+          <div className="relative w-full h-full flex items-center justify-center opacity-30">
+            <ItemIcon item={{ name: slotType, category: slotType } as any} className="w-full h-full p-2 opacity-30 grayscale bg-transparent border-0 shadow-none" />
           </div>
         )}
       </div>

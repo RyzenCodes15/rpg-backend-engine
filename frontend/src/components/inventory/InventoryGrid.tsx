@@ -21,8 +21,8 @@ export const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, onItemC
   const getRarityBorder = (rarity: string) => {
     switch (rarity) {
       case 'COMMON': return 'border-white hover:border-slate-300';
-      case 'RARE': return 'border-blue-500 hover:border-blue-300';
-      case 'LEGENDARY': return 'border-orange-500 hover:border-orange-300';
+      case 'RARE': return 'border-blue-500 hover:border-blue-300 shadow-[inset_0_0_8px_rgba(59,130,246,0.25)]';
+      case 'LEGENDARY': return 'border-orange-500 hover:border-orange-300 shadow-[inset_0_0_12px_rgba(249,115,22,0.4)] bg-orange-950/20';
       default: return 'border-rpg-border hover:border-rpg-text';
     }
   };
@@ -46,14 +46,14 @@ export const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, onItemC
           >
             {slot ? (
               <ItemTooltip item={slot.item}>
-                <div className="w-full h-full flex items-center justify-center p-2">
-                  <div className="relative w-full h-full">
-                    <ItemIcon item={slot.item} className="w-full h-full drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]" />
+                <div className="w-full h-full flex items-center justify-center p-1.5">
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <ItemIcon item={slot.item} className="w-full h-full border-0 bg-transparent shadow-none p-0.5" />
                   </div>
                   
                   {/* Quantity Badge */}
                   {slot.quantity > 1 && (
-                    <span className="absolute -bottom-2 -right-2 bg-rpg-bg text-white font-retro text-sm px-1 border-2 border-rpg-border pixel-border drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+                    <span className="absolute -bottom-2 -right-2 bg-rpg-bg text-white font-retro text-sm px-1 border-2 border-rpg-border pixel-border drop-shadow-[1px_1px_0px_rgba(0,0,0,1)] z-10">
                       x{slot.quantity}
                     </span>
                   )}
