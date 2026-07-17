@@ -131,19 +131,19 @@ INSERT INTO monster_loot (id, monster_id, item_id, drop_chance) VALUES
 (gen_random_uuid(), 'bbbbbbbb-2222-2222-2222-222222222222', (SELECT id FROM items WHERE name = 'Bone Helmet' LIMIT 1), 10.0), -- Bone Helmet
 (gen_random_uuid(), 'bbbbbbbb-2222-2222-2222-222222222222', (SELECT id FROM items WHERE name = 'Cursed Skull' LIMIT 1), 1.0);  -- Cursed Skull
 
--- Slime
+-- Slime (`cccccccc-3333-3333-3333-333333333333`)
 INSERT INTO monster_loot (id, monster_id, item_id, drop_chance) VALUES 
-(gen_random_uuid(), 'eeeeeeee-5555-5555-5555-555555555555', (SELECT id FROM items WHERE name = 'Green Jelly' LIMIT 1), 40.0), -- Green Jelly
-(gen_random_uuid(), 'eeeeeeee-5555-5555-5555-555555555555', (SELECT id FROM items WHERE name = 'Blue Jelly' LIMIT 1), 30.0), -- Blue Jelly
-(gen_random_uuid(), 'eeeeeeee-5555-5555-5555-555555555555', (SELECT id FROM items WHERE name = 'Mana Jelly' LIMIT 1), 10.0),
-(gen_random_uuid(), 'eeeeeeee-5555-5555-5555-555555555555', (SELECT id FROM items WHERE name = 'Primal Slime Core' LIMIT 1), 1.0);  -- Primal Slime Core
+(gen_random_uuid(), (SELECT id FROM monsters WHERE name = 'Slime' LIMIT 1), (SELECT id FROM items WHERE name = 'Green Jelly' LIMIT 1), 40.0), -- Green Jelly
+(gen_random_uuid(), (SELECT id FROM monsters WHERE name = 'Slime' LIMIT 1), (SELECT id FROM items WHERE name = 'Blue Jelly' LIMIT 1), 30.0), -- Blue Jelly
+(gen_random_uuid(), (SELECT id FROM monsters WHERE name = 'Slime' LIMIT 1), (SELECT id FROM items WHERE name = 'Mana Jelly' LIMIT 1), 10.0),
+(gen_random_uuid(), (SELECT id FROM monsters WHERE name = 'Slime' LIMIT 1), (SELECT id FROM items WHERE name = 'Primal Slime Core' LIMIT 1), 1.0);  -- Primal Slime Core
 
--- Orc
+-- Orc (`eeeeeeee-5555-5555-5555-555555555555`)
 INSERT INTO monster_loot (id, monster_id, item_id, drop_chance) VALUES 
-(gen_random_uuid(), 'cccccccc-3333-3333-3333-333333333333', (SELECT id FROM items WHERE name = 'Orc Axe' LIMIT 1), 30.0),
-(gen_random_uuid(), 'cccccccc-3333-3333-3333-333333333333', (SELECT id FROM items WHERE name = 'Heavy Armor Plate' LIMIT 1), 30.0), -- Heavy Armor Plate
-(gen_random_uuid(), 'cccccccc-3333-3333-3333-333333333333', (SELECT id FROM items WHERE name = 'War Boots' LIMIT 1), 10.0), -- War Boots
-(gen_random_uuid(), 'cccccccc-3333-3333-3333-333333333333', (SELECT id FROM items WHERE name = 'Warlord''s Axe' LIMIT 1), 1.0);  -- Warlord's Axe
+(gen_random_uuid(), (SELECT id FROM monsters WHERE name = 'Orc' LIMIT 1), (SELECT id FROM items WHERE name = 'Orc Axe' LIMIT 1), 30.0),
+(gen_random_uuid(), (SELECT id FROM monsters WHERE name = 'Orc' LIMIT 1), (SELECT id FROM items WHERE name = 'Heavy Armor Plate' LIMIT 1), 30.0), -- Heavy Armor Plate
+(gen_random_uuid(), (SELECT id FROM monsters WHERE name = 'Orc' LIMIT 1), (SELECT id FROM items WHERE name = 'War Boots' LIMIT 1), 10.0), -- War Boots
+(gen_random_uuid(), (SELECT id FROM monsters WHERE name = 'Orc' LIMIT 1), (SELECT id FROM items WHERE name = 'Warlord''s Axe' LIMIT 1), 1.0);  -- Warlord's Axe
 
 -- 6. Add New Hero Skills
 -- Warrior

@@ -21,7 +21,7 @@ ON CONFLICT (name) DO UPDATE SET
     required_level = EXCLUDED.required_level,
     bonus_attack = EXCLUDED.bonus_attack;
 
--- 3. Add to Orc's Loot Table (cccccccc-3333-3333-3333-333333333333) with 100% guaranteed drop for demo/portfolio
+-- 3. Add to Orc's Loot Table (using subquery by name 'Orc' to ensure exact monster match) with 100% guaranteed drop for demo/portfolio
 INSERT INTO monster_loot (id, monster_id, item_id, drop_chance) VALUES 
-(gen_random_uuid(), 'cccccccc-3333-3333-3333-333333333333', (SELECT id FROM items WHERE name = 'Orc Tooth' LIMIT 1), 100.0),
-(gen_random_uuid(), 'cccccccc-3333-3333-3333-333333333333', (SELECT id FROM items WHERE name = 'Shiny Sword' LIMIT 1), 100.0);
+(gen_random_uuid(), (SELECT id FROM monsters WHERE name = 'Orc' LIMIT 1), (SELECT id FROM items WHERE name = 'Orc Tooth' LIMIT 1), 100.0),
+(gen_random_uuid(), (SELECT id FROM monsters WHERE name = 'Orc' LIMIT 1), (SELECT id FROM items WHERE name = 'Shiny Sword' LIMIT 1), 100.0);
