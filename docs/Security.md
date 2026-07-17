@@ -2,7 +2,7 @@
 
 ## Authentication System
 
-The Full-Stack RPG Game uses **JSON Web Tokens (JWT)** for stateless authentication.
+Monster Maniac uses **JSON Web Tokens (JWT)** for stateless authentication.
 
 ### Token Characteristics
 - **Algorithm**: HMAC SHA-256

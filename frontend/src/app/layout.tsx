@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Full-Stack RPG Game',
-  description: 'Full-Stack RPG Game Interface',
+  title: 'Monster Maniac',
+  description: 'Monster Maniac Interface',
 };
 
 export default function RootLayout({

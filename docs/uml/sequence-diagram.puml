@@ -1,4 +1,5 @@
 @startuml sequence-diagram
+title Monster Maniac - Sequence Diagram
 actor Client
 
 box "Presentation"

@@ -1,6 +1,6 @@
 # API Documentation
 
-The Full-Stack RPG Game API is documented using OpenAPI 3.
+The Monster Maniac API is documented using OpenAPI 3.
 
 ## Base URL
 `/api/v1` (Note: combat/monsters currently mapped without v1 prefix in controllers, ensure context path handles it)

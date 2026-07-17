@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/dashboard">
             <h1 className="text-xl md:text-2xl font-pixel text-rpg-primary hover:text-rpg-primaryHover transition-colors drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
-              FULL-STACK RPG GAME
+              MONSTER MANIAC
             </h1>
           </Link>
           <div className="flex gap-4 items-center">

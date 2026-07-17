@@ -1,4 +1,5 @@
 @startuml class-diagram
+title Monster Maniac - Class Diagram
 skinparam style strictuml
 
 package "com.rpgengine.auth" {

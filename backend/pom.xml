@@ -14,8 +14,8 @@
     <groupId>com.rpgengine</groupId>
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>full-stack-rpg-game</name>
-    <description>Full-Stack RPG Game</description>
+    <name>monster-maniac</name>
+    <description>Monster Maniac</description>
 
     <properties>
         <java.version>21</java.version>

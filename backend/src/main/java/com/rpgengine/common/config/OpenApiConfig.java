@@ -17,8 +17,8 @@ public class OpenApiConfig {
     public OpenAPI rpgEngineOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Full-Stack RPG Game API")
-                        .description("API Documentation for the Full-Stack RPG Game")
+                        .title("Monster Maniac API")
+                        .description("API Documentation for Monster Maniac")
                         .version("v1.0.0"))
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
                 .components(new Components()

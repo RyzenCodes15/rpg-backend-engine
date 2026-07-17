@@ -1,6 +1,6 @@
 spring:
   application:
-    name: full-stack-rpg-game
+    name: monster-maniac
   
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/rpg_engine}

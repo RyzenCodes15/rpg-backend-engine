@@ -1,4 +1,5 @@
 @startuml er-diagram
+title Monster Maniac - ER Diagram
 hide circle
 skinparam linetype ortho
 

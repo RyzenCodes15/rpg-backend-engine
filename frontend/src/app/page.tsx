@@ -16,7 +16,7 @@ export default function HomePage() {
 
       <div className="z-10 bg-rpg-surface/80 p-8 md:p-16 border-4 border-rpg-border pixel-border backdrop-blur-sm max-w-4xl w-full flex flex-col items-center">
         <h1 className="text-4xl md:text-7xl font-pixel text-rpg-primary mb-8 text-center drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] uppercase">
-          Realm<br/>of Legends
+          Monster<br/>Maniac
         </h1>
         
         <p className="text-xl md:text-2xl font-retro text-white mb-12 text-center max-w-2xl drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">

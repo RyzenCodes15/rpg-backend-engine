@@ -1,6 +1,6 @@
-# Full-Stack RPG Game
+# Monster Maniac
 
-A Full-Stack RPG Game built with Spring Boot, Next.js, and PostgreSQL. Features a robust Clean Architecture backend with package-by-feature organization, comprehensive JWT authentication, and a pixel-art styled React frontend.
+Monster Maniac built with Spring Boot, Next.js, and PostgreSQL. Features a robust Clean Architecture backend with package-by-feature organization, comprehensive JWT authentication, and a pixel-art styled React frontend.
 
 ## 🌟 Features
 
@@ -42,8 +42,8 @@ A Full-Stack RPG Game built with Spring Boot, Next.js, and PostgreSQL. Features 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/full-stack-rpg-game.git
-   cd full-stack-rpg-game
+   git clone https://github.com/yourusername/monster-maniac.git
+   cd monster-maniac
    ```
 
 2. Start the services:
