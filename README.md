@@ -98,7 +98,7 @@ Experience thrilling, turn-based combat featuring rich combat logs, damage calcu
 
 ### Victory Screen
 
-Celebrate triumphant battles with detailed post-match statistics, earned experience, gold rewards, and guaranteed legendary drops.
+Celebrate triumphant battles with detailed post-match statistics, earned experience, gold rewards, and guaranteed legendary loot drops.
 
 ![Victory Screen](docs/images/victoryscreen.png)
 
